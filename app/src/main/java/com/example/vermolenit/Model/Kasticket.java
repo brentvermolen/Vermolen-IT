@@ -1,22 +1,17 @@
 package com.example.vermolenit.Model;
 
 import android.arch.persistence.room.Entity;
-import android.arch.persistence.room.ForeignKey;
 import android.arch.persistence.room.Ignore;
 import android.arch.persistence.room.PrimaryKey;
 import android.arch.persistence.room.TypeConverters;
-import android.content.Context;
 import android.support.annotation.NonNull;
 
-import com.example.vermolenit.Class.Singletons;
+import com.example.vermolenit.Class.BooleanConverter;
 import com.example.vermolenit.Class.TimeStampConverter;
-import com.example.vermolenit.DB.DbVermolenIt;
 
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-
-import static android.arch.persistence.room.ForeignKey.CASCADE;
 
 @Entity
 public class Kasticket {
@@ -26,6 +21,8 @@ public class Kasticket {
     private Date datum;
     @NonNull
     private int klant_id;
+    @TypeConverters(BooleanConverter.class)
+    private boolean isBetaald;
 
     @Ignore
     private Klant klant;
@@ -72,6 +69,14 @@ public class Kasticket {
 
     public void setKasticketArtikels(List<KasticketArtikel> artikels) {
         this.kasticketArtikels = artikels;
+    }
+
+    public boolean isBetaald() {
+        return isBetaald;
+    }
+
+    public void setBetaald(boolean betaald) {
+        isBetaald = betaald;
     }
 
     public List<Artikel> getArtikels(){
