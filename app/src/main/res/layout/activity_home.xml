@@ -8,9 +8,70 @@
         android:id="@+id/my_toolbar"
         layout="@layout/toolbar" />
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Hello World!" />
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:background="@color/colorAccent">
+
+        <HorizontalScrollView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="12dp"
+            android:background="@drawable/border_red">
+
+            <LinearLayout
+                android:id="@+id/llVoorraad"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <include
+                    layout="@layout/artikel_tekort_item" />
+
+            </LinearLayout>
+
+        </HorizontalScrollView>
+
+        <LinearLayout
+            android:id="@+id/llOverzichtOmzet"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/lblBetaald"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="€ XXX,XX"
+                android:textStyle="bold"
+                android:layout_marginTop="15dp"
+                android:textSize="35dp"
+                android:gravity="center"/>
+
+            <TextView
+                android:id="@+id/lblOpenstaand"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="€ XXX,XX"
+                android:textStyle="bold"
+                android:textSize="15dp"
+                android:gravity="center"/>
+
+            <ProgressBar
+                android:id="@+id/prgOmzet"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="15dp"
+                style="@android:style/Widget.ProgressBar.Horizontal"
+                android:progressBackgroundTint="@android:color/holo_red_dark"
+                android:backgroundTint="@android:color/holo_green_dark"
+                android:progressTint="@android:color/holo_green_dark"
+                android:progress="75"
+                android:max="100" />
+
+        </LinearLayout>
+
+    </LinearLayout>
 
 </LinearLayout>

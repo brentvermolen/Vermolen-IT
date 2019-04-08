@@ -1,43 +1,114 @@
 package com.example.vermolenit;
 
-import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.LinearLayout;
+import android.widget.ProgressBar;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.vermolenit.Class.DAC;
 import com.example.vermolenit.Class.Singletons;
-import com.example.vermolenit.DB.ArtikelDAO;
 import com.example.vermolenit.DB.DbVermolenIt;
-import com.example.vermolenit.DB.KasticketArtikelDAO;
-import com.example.vermolenit.DB.KasticketDAO;
-import com.example.vermolenit.DB.KlantDAO;
 import com.example.vermolenit.Model.Artikel;
 import com.example.vermolenit.Model.Kasticket;
 import com.example.vermolenit.Model.KasticketArtikel;
-import com.example.vermolenit.Model.Klant;
 
 import java.util.List;
 
 public class HomeActivity extends AppCompatActivity {
 
     private Toolbar mToolbar;
+    private LinearLayout llVoorraad;
+
+    private TextView lblBetaald;
+    private TextView lblOpenstaand;
+    private ProgressBar prgOmzet;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
-        setTitle("Vermolen IT");
+        setTitle(getResources().getString(R.string.app_name));
 
         Singletons.context = this;
 
         mToolbar = (Toolbar) findViewById(R.id.my_toolbar);
+        mToolbar.setNavigationIcon(R.drawable.ic_shut_down);
         setSupportActionBar(mToolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
+
+        initViews();
+        handleEvents();
+
+        checkVoorraad();
+        checkOmzet();
+    }
+
+    private void initViews() {
+        llVoorraad = findViewById(R.id.llVoorraad);
+
+        lblBetaald = findViewById(R.id.lblBetaald);
+        lblOpenstaand = findViewById(R.id.lblOpenstaand);
+        prgOmzet = findViewById(R.id.prgOmzet);
+    }
+
+    private void handleEvents() {
+
+    }
+
+    private void checkVoorraad() {
+        List<Artikel> voorraadTekort = DbVermolenIt.getDatabase(this).artikelDAO().getWhereVoorraadIsLow();
+        llVoorraad.removeAllViews();
+
+        if (voorraadTekort.size() > 0){
+            llVoorraad.setVisibility(View.VISIBLE);
+
+            for (Artikel artikel : voorraadTekort){
+                LayoutInflater inflater = (LayoutInflater)getSystemService(LAYOUT_INFLATER_SERVICE);
+
+                LinearLayout view = (LinearLayout) inflater.inflate(R.layout.artikel_tekort_item, null);
+                ((TextView) view.findViewById(R.id.lblTitel)).setText(artikel.getOmschrijving());
+                TextView lblVoorraad = view.findViewById(R.id.lblVoorraad);
+                lblVoorraad.setText(artikel.getVoorraad() + " stuks");
+                if (artikel.getVoorraad() <= artikel.getMeldingOpVoorraad()){
+                    lblVoorraad.setTextColor(getResources().getColor(android.R.color.holo_red_dark, null));
+                }else {
+                    lblVoorraad.setTextColor(getResources().getColor(android.R.color.black, null));
+                }
+
+                llVoorraad.addView(view);
+            }
+        }else {
+            llVoorraad.setVisibility(View.GONE);
+        }
+    }
+
+    private void checkOmzet(){
+        double openstaand = 0;
+        double betaald = 0;
+
+        for (Kasticket kasticket : DAC.Kastickets) {
+            for (KasticketArtikel ka : kasticket.getKasticketArtikels()) {
+                if (kasticket.isBetaald()){
+                    betaald += ka.getHuidige_prijs() * ka.getAantal();
+                }else{
+                    openstaand += ka.getHuidige_prijs() * ka.getAantal();
+                }
+            }
+        }
+
+        prgOmzet.setMax((int)(betaald + openstaand));
+        prgOmzet.setProgress((int)betaald);
+
+        lblBetaald.setText(String.format("€ %.2f", betaald));
+        lblOpenstaand.setText(String.format("€ %.2f", openstaand));
     }
 
     @Override
@@ -57,13 +128,22 @@ public class HomeActivity extends AppCompatActivity {
             case R.id.action_add_check:
                 Toast.makeText(this, "Check toevoegen", Toast.LENGTH_SHORT).show();
                 break;
+            case R.id.action_check_supply:
+                Toast.makeText(this, "Contoleer artikels", Toast.LENGTH_SHORT).show();
+                break;
             case 16908332:
-                onBackPressed();
+                finish();
                 break;
             default:
                 super.onOptionsItemSelected(item);
         }
 
         return true;
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        checkVoorraad();
     }
 }

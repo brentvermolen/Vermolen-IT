@@ -21,4 +21,7 @@ public interface ArtikelDAO {
 
     @Insert
     long insert(Artikel artikel);
+
+    @Query("Select * From Artikel Where voorraad<=meldingOpVoorraad AND voorraad!=-1 AND meldingOpVoorraad!=-1")
+    List<Artikel> getWhereVoorraadIsLow();
 }

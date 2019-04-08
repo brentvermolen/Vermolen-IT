@@ -15,7 +15,7 @@ import java.util.List;
 
 @Entity
 public class Kasticket {
-    @PrimaryKey
+    @PrimaryKey(autoGenerate = true)
     private int id;
     @TypeConverters(TimeStampConverter.class)
     private Date datum;

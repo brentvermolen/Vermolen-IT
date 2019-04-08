@@ -18,7 +18,6 @@ import com.example.vermolenit.Model.Kasticket;
 import com.example.vermolenit.Model.KasticketArtikel;
 import com.example.vermolenit.Model.Klant;
 
-import java.security.spec.ECField;
 import java.util.Calendar;
 import java.util.List;
 
@@ -97,8 +96,24 @@ public class SplashScreen extends AppCompatActivity {
 
             Artikel artikel = new Artikel();
             artikel.setOmschrijving("Advies aan huis");
-            artikel.setBedrag(15);
+            artikel.setPrijs(15);
+            artikel.setVoorraad(-1);
+            artikel.setMeldingOpVoorraad(-1);
             long artikel_id = artikelDAO.insert(artikel);
+
+            Artikel artikel2 = new Artikel();
+            artikel2.setOmschrijving("USB-Stick (8Gb)");
+            artikel2.setPrijs(15);
+            artikel2.setVoorraad(7);
+            artikel2.setMeldingOpVoorraad(10);
+            long artikel_id2 = artikelDAO.insert(artikel2);
+
+            Artikel artikel3 = new Artikel();
+            artikel3.setOmschrijving("HDMI-Kabel (3m)");
+            artikel3.setPrijs(15);
+            artikel3.setVoorraad(2);
+            artikel3.setMeldingOpVoorraad(2);
+            long artikel_id3 = artikelDAO.insert(artikel3);
 
             Kasticket kasticket = new Kasticket();
             kasticket.setKlant_id((int)klant_id);

@@ -17,7 +17,7 @@ import com.example.vermolenit.Model.Klant;
 import java.util.Calendar;
 import java.util.concurrent.Executors;
 
-@Database(entities =  {Klant.class, Artikel.class, Kasticket.class, KasticketArtikel.class}, version = 1)
+@Database(entities =  {Klant.class, Artikel.class, Kasticket.class, KasticketArtikel.class}, version = 2)
 public abstract class DbVermolenIt extends RoomDatabase {
     private static DbVermolenIt INSTANCE;
     private static final String DB_NAME = "Vermolen_IT.db";
@@ -89,8 +89,24 @@ public abstract class DbVermolenIt extends RoomDatabase {
 
             Artikel artikel = new Artikel();
             artikel.setOmschrijving("Advies aan huis");
-            artikel.setBedrag(15);
+            artikel.setPrijs(15);
+            artikel.setVoorraad(-1);
+            artikel.setMeldingOpVoorraad(-1);
             long artikel_id = artikelDAO.insert(artikel);
+
+            Artikel artikel2 = new Artikel();
+            artikel2.setOmschrijving("USB-Stick (8Gb)");
+            artikel2.setPrijs(15);
+            artikel2.setVoorraad(7);
+            artikel2.setMeldingOpVoorraad(10);
+            long artikel_id2 = artikelDAO.insert(artikel2);
+
+            Artikel artikel3 = new Artikel();
+            artikel3.setOmschrijving("HDMI-Kabel (3m)");
+            artikel3.setPrijs(15);
+            artikel3.setVoorraad(2);
+            artikel3.setMeldingOpVoorraad(2);
+            long artikel_id3 = artikelDAO.insert(artikel3);
 
             Kasticket kasticket = new Kasticket();
             kasticket.setKlant_id((int)klant_id);
@@ -103,6 +119,19 @@ public abstract class DbVermolenIt extends RoomDatabase {
             kasticketArtikel.setHuidige_prijs(15);
             kasticketArtikel.setAantal(4);
             kasticketArtikelDAO.insert(kasticketArtikel);
+
+            Kasticket kasticket1 = new Kasticket();
+            kasticket1.setKlant_id((int)klant_id);
+            kasticket1.setDatum(Calendar.getInstance().getTime());
+            kasticket1.setBetaald(true);
+            long kasticket_id1 = kasticketDAO.insert(kasticket1);
+
+            KasticketArtikel kasticketArtikel2 = new KasticketArtikel();
+            kasticketArtikel2.setArtikel_id((int)artikel_id2);
+            kasticketArtikel2.setKasticket_id((int)kasticket_id1);
+            kasticketArtikel2.setHuidige_prijs(27);
+            kasticketArtikel2.setAantal(3);
+            kasticketArtikelDAO.insert(kasticketArtikel2);
 
             return null;
         }

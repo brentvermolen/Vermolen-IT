@@ -16,7 +16,7 @@ import java.util.List;
 
 @Entity
 public class Klant {
-    @PrimaryKey
+    @PrimaryKey(autoGenerate = true)
     private int id;
     @TypeConverters(AansprekingConverter.class)
     private Aanspreking aanspreking;
