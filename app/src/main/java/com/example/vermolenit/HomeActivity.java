@@ -1,5 +1,6 @@
 package com.example.vermolenit;
 
+import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
@@ -26,6 +27,7 @@ public class HomeActivity extends AppCompatActivity {
     private Toolbar mToolbar;
     private LinearLayout llVoorraad;
 
+    private TextView lblOmzet;
     private TextView lblBetaald;
     private TextView lblOpenstaand;
     private ProgressBar prgOmzet;
@@ -54,6 +56,7 @@ public class HomeActivity extends AppCompatActivity {
     private void initViews() {
         llVoorraad = findViewById(R.id.llVoorraad);
 
+        lblOmzet = findViewById(R.id.lblOmzet);
         lblBetaald = findViewById(R.id.lblBetaald);
         lblOpenstaand = findViewById(R.id.lblOpenstaand);
         prgOmzet = findViewById(R.id.prgOmzet);
@@ -107,8 +110,9 @@ public class HomeActivity extends AppCompatActivity {
         prgOmzet.setMax((int)(betaald + openstaand));
         prgOmzet.setProgress((int)betaald);
 
-        lblBetaald.setText(String.format("€ %.2f", betaald));
-        lblOpenstaand.setText(String.format("€ %.2f", openstaand));
+        lblOmzet.setText(String.format("€ %.2f", betaald + openstaand));
+        lblBetaald.setText(String.format("€ %.2f ontvangen", betaald));
+        lblOpenstaand.setText(String.format("€ %.2f openstaand", openstaand));
     }
 
     @Override
@@ -125,11 +129,12 @@ public class HomeActivity extends AppCompatActivity {
             case R.id.action_add_person:
                 Toast.makeText(this, "Persoon toevoegen", Toast.LENGTH_SHORT).show();
                 break;
-            case R.id.action_add_check:
+            case R.id.action_add:
                 Toast.makeText(this, "Check toevoegen", Toast.LENGTH_SHORT).show();
                 break;
             case R.id.action_check_supply:
-                Toast.makeText(this, "Contoleer artikels", Toast.LENGTH_SHORT).show();
+                Intent intent = new Intent(HomeActivity.this, InventoryActivity.class);
+                startActivity(intent);
                 break;
             case 16908332:
                 finish();

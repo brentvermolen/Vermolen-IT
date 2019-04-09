@@ -5,20 +5,9 @@
     tools:context=".HomeActivity">
 
     <item
-        android:id="@+id/action_add_person"
-        android:icon="@drawable/ic_person_add"
-        android:title="Nieuwe Klant"
-        app:showAsAction="ifRoom"></item>
-
-    <item
         android:id="@+id/action_add"
         android:icon="@drawable/ic_check_add"
         android:title="Nieuwe Factuur"
         app:showAsAction="always"></item>
-
-    <item
-        android:id="@+id/action_check_supply"
-        android:title="Voorraad"
-        app:showAsAction="never"></item>
 
 </menu>

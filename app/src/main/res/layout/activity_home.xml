@@ -37,38 +37,57 @@
             android:id="@+id/llOverzichtOmzet"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:background="@color/colorAccentSecondary"
             android:orientation="vertical">
 
             <TextView
-                android:id="@+id/lblBetaald"
+                android:id="@+id/lblOmzet"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="€ XXX,XX"
                 android:textStyle="bold"
-                android:layout_marginTop="15dp"
+                android:layout_marginTop="10dp"
                 android:textSize="35dp"
-                android:gravity="center"/>
-
-            <TextView
-                android:id="@+id/lblOpenstaand"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="€ XXX,XX"
-                android:textStyle="bold"
-                android:textSize="15dp"
                 android:gravity="center"/>
 
             <ProgressBar
                 android:id="@+id/prgOmzet"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="15dp"
+                android:layout_marginTop="5dp"
                 style="@android:style/Widget.ProgressBar.Horizontal"
                 android:progressBackgroundTint="@android:color/holo_red_dark"
                 android:backgroundTint="@android:color/holo_green_dark"
                 android:progressTint="@android:color/holo_green_dark"
                 android:progress="75"
                 android:max="100" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="7dp">
+
+                <TextView
+                    android:id="@+id/lblBetaald"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="€ XXX,XX ontvangen"
+                    android:textStyle="bold"
+                    android:textSize="15dp"
+                    android:layout_weight="1"
+                    android:gravity="left"/>
+
+                <TextView
+                    android:id="@+id/lblOpenstaand"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="€ XXX,XX openstaand"
+                    android:textStyle="bold"
+                    android:textSize="15dp"
+                    android:layout_weight="1"
+                    android:gravity="right"/>
+
+            </LinearLayout>
 
         </LinearLayout>
 
