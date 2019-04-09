@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:background="@color/colorAccent">
+
+    <TextView
+        android:id="@+id/lblTitel"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/colorPrimary"
+        android:text="Titel"
+        android:textAlignment="center"
+        android:textSize="35dp"
+        android:textColor="@android:color/black"
+        android:textStyle="bold"
+        android:padding="35dp"/>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="center"
+        android:layout_margin="15dp">
+
+        <NumberPicker
+            android:id="@+id/numberPicker"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:solidColor="@color/colorSecondary"></NumberPicker>
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <Button
+            android:id="@+id/btnAnnuleren"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Annuleren"
+            android:background="@drawable/border_black"
+            android:layout_weight="1"/>
+
+        <Button
+            android:id="@+id/btnOke"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Oke"
+            android:background="@drawable/border_black"
+            android:layout_weight="1"/>
+
+    </LinearLayout>
+
+</LinearLayout>

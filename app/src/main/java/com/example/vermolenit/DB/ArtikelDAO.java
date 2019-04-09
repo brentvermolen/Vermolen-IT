@@ -3,6 +3,7 @@ package com.example.vermolenit.DB;
 import android.arch.persistence.room.Dao;
 import android.arch.persistence.room.Insert;
 import android.arch.persistence.room.Query;
+import android.arch.persistence.room.Update;
 
 import com.example.vermolenit.Model.Artikel;
 
@@ -24,4 +25,7 @@ public interface ArtikelDAO {
 
     @Query("Select * From Artikel Where voorraad<=meldingOpVoorraad AND voorraad!=-1 AND meldingOpVoorraad!=-1")
     List<Artikel> getWhereVoorraadIsLow();
+
+    @Update
+    void update(Artikel artikel);
 }

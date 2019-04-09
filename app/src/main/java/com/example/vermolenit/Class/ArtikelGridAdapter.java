@@ -80,7 +80,25 @@ public class ArtikelGridAdapter extends BaseAdapter {
             viewHolder.btnAddVoorraad.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    Artikel artikel = (Artikel)viewHolder.lblTitel.getTag();
+                    final Artikel artikel = (Artikel)viewHolder.lblTitel.getTag();
+                    final DialogEditInteger dialogEditInteger = new DialogEditInteger(mContext, artikel.getOmschrijving() + "Toevoegen", 1, 99);
+                    dialogEditInteger.btnOke.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            artikel.setVoorraad(artikel.getVoorraad() + dialogEditInteger.getValue());
+                            dao.update(artikel);
+                            viewHolder.lblVoorraad.setText(String.valueOf(artikel.getVoorraad()));
+                            dialogEditInteger.cancel();
+                        }
+                    });
+                    dialogEditInteger.btnAnnuleren.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            dialogEditInteger.cancel();
+                        }
+                    });
+
+                    dialogEditInteger.show();
                 }
             });
 

@@ -8,6 +8,7 @@ import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.HorizontalScrollView;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
@@ -26,6 +27,7 @@ public class HomeActivity extends AppCompatActivity {
 
     private Toolbar mToolbar;
     private LinearLayout llVoorraad;
+    private HorizontalScrollView horizontalScrollView;
 
     private TextView lblOmzet;
     private TextView lblBetaald;
@@ -55,6 +57,7 @@ public class HomeActivity extends AppCompatActivity {
 
     private void initViews() {
         llVoorraad = findViewById(R.id.llVoorraad);
+        horizontalScrollView = findViewById(R.id.horizontal_scrollview);
 
         lblOmzet = findViewById(R.id.lblOmzet);
         lblBetaald = findViewById(R.id.lblBetaald);
@@ -72,6 +75,7 @@ public class HomeActivity extends AppCompatActivity {
 
         if (voorraadTekort.size() > 0){
             llVoorraad.setVisibility(View.VISIBLE);
+            horizontalScrollView.setVisibility(View.VISIBLE);
 
             for (Artikel artikel : voorraadTekort){
                 LayoutInflater inflater = (LayoutInflater)getSystemService(LAYOUT_INFLATER_SERVICE);
@@ -90,6 +94,7 @@ public class HomeActivity extends AppCompatActivity {
             }
         }else {
             llVoorraad.setVisibility(View.GONE);
+            horizontalScrollView.setVisibility(View.GONE);
         }
     }
 
