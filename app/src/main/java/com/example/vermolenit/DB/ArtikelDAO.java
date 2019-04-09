@@ -28,4 +28,7 @@ public interface ArtikelDAO {
 
     @Update
     void update(Artikel artikel);
+
+    @Query("Delete From Artikel Where id=(:id)")
+    void delete(int id);
 }

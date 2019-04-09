@@ -1,6 +1,7 @@
 package com.example.vermolenit.Class;
 
 import android.content.Context;
+import android.content.DialogInterface;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -26,7 +27,7 @@ public class ArtikelGridAdapter extends BaseAdapter {
         this.mContext = context;
 
         dao = DbVermolenIt.getDatabase(mContext).artikelDAO();
-        artikels = dao.getAll();
+        artikels = DAC.Artikels;
         artikels.sort(new Comparator<Artikel>() {
             @Override
             public int compare(Artikel o1, Artikel o2) {
@@ -81,7 +82,7 @@ public class ArtikelGridAdapter extends BaseAdapter {
                 @Override
                 public void onClick(View v) {
                     final Artikel artikel = (Artikel)viewHolder.lblTitel.getTag();
-                    final DialogEditInteger dialogEditInteger = new DialogEditInteger(mContext, artikel.getOmschrijving() + "Toevoegen", 1, 99);
+                    final DialogEditInteger dialogEditInteger = new DialogEditInteger(mContext, artikel.getOmschrijving() + " Toevoegen", 1, 99);
                     dialogEditInteger.btnOke.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
@@ -105,14 +106,52 @@ public class ArtikelGridAdapter extends BaseAdapter {
             viewHolder.btnDelete.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    Artikel artikel = (Artikel)viewHolder.lblTitel.getTag();
+                    final Artikel artikel = (Artikel)viewHolder.lblTitel.getTag();
+
+                    final DialogYesNo dialogYesNo = new DialogYesNo(mContext, "Ben je zeker?", "Ben je zeker dat je '" + artikel.getOmschrijving() + "' wil verwijderen?");
+                    dialogYesNo.btnYes.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            artikels.remove(artikel);
+                            dao.delete(artikel.getId());
+                            DAC.Artikels.remove(artikel);
+                            notifyDataSetChanged();
+                            dialogYesNo.cancel();
+                        }
+                    });
+                    dialogYesNo.btnNo.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            dialogYesNo.cancel();
+                        }
+                    });
+
+                    dialogYesNo.show();
                 }
             });
 
             viewHolder.btnEditMeldingOp.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    Artikel artikel = (Artikel)viewHolder.lblTitel.getTag();
+                    final Artikel artikel = (Artikel)viewHolder.lblTitel.getTag();
+                    final DialogEditInteger dialogEditInteger = new DialogEditInteger(mContext, artikel.getOmschrijving() + " Melding", 1, 10);
+                    dialogEditInteger.btnOke.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            artikel.setMeldingOpVoorraad(dialogEditInteger.getValue());
+                            dao.update(artikel);
+                            viewHolder.lblMeldingOp.setText(String.valueOf(artikel.getMeldingOpVoorraad()));
+                            dialogEditInteger.cancel();
+                        }
+                    });
+                    dialogEditInteger.btnAnnuleren.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            dialogEditInteger.cancel();
+                        }
+                    });
+
+                    dialogEditInteger.show();
                 }
             });
 
