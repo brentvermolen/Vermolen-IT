@@ -19,11 +19,21 @@
 
             <TextView
                 android:id="@+id/lblTitel"
-                android:layout_width="match_parent"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
                 android:text="Artikel"
                 android:textSize="30dp"
+                android:textStyle="bold"/>
+
+            <TextView
+                android:id="@+id/lblPrijs"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:gravity="center|left"
+                android:layout_marginLeft="15dp"
+                android:text="€ XX,XX"
+                android:textSize="20dp"
                 android:textStyle="bold"/>
 
             <ImageView
@@ -39,13 +49,6 @@
             android:layout_height="wrap_content"
             android:orientation="horizontal"
             android:layout_marginLeft="10dp">
-
-            <ImageView
-                android:id="@+id/btn_add_voorraad"
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:src="@drawable/ic_check_add"
-                android:layout_marginRight="15dp"/>
 
             <TextView
                 android:layout_width="wrap_content"
@@ -68,13 +71,6 @@
             android:orientation="horizontal"
             android:layout_marginTop="5dp"
             android:layout_marginLeft="10dp">
-
-            <ImageView
-                android:id="@+id/btn_edit_melding_op"
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:layout_marginRight="15dp"
-                android:src="@drawable/ic_edit" />
 
             <TextView
                 android:layout_width="wrap_content"

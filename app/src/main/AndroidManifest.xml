@@ -9,6 +9,7 @@
         android:roundIcon="@mipmap/ic_logo"
         android:supportsRtl="true"
         android:theme="@style/AppTheme.NoBar">
+        <activity android:name=".CustomerActivity"></activity>
         <activity android:name=".InventoryActivity"></activity>
         <activity
             android:name=".SplashScreen"

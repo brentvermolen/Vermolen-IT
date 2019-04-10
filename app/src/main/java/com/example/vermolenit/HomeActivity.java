@@ -15,6 +15,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.vermolenit.Class.DAC;
+import com.example.vermolenit.Class.DialogKlantToevoegen;
 import com.example.vermolenit.Class.Singletons;
 import com.example.vermolenit.DB.DbVermolenIt;
 import com.example.vermolenit.Model.Artikel;
@@ -132,7 +133,9 @@ public class HomeActivity extends AppCompatActivity {
 
         switch (id){
             case R.id.action_add_person:
-                Toast.makeText(this, "Persoon toevoegen", Toast.LENGTH_SHORT).show();
+                DialogKlantToevoegen dialogKlantToevoegen = new DialogKlantToevoegen(this);
+                //TODO
+                dialogKlantToevoegen.show();
                 break;
             case R.id.action_add:
                 Toast.makeText(this, "Check toevoegen", Toast.LENGTH_SHORT).show();
@@ -140,6 +143,10 @@ public class HomeActivity extends AppCompatActivity {
             case R.id.action_check_supply:
                 Intent intent = new Intent(HomeActivity.this, InventoryActivity.class);
                 startActivity(intent);
+                break;
+            case R.id.action_customers:
+                Intent intent1 = new Intent(HomeActivity.this, CustomerActivity.class);
+                startActivity(intent1);
                 break;
             case 16908332:
                 finish();

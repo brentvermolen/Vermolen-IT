@@ -1,0 +1,196 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:background="@color/colorAccent">
+
+    <TextView
+        android:id="@+id/lblTitel"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/colorPrimary"
+        android:text="Klant Toevoegen"
+        android:textAlignment="center"
+        android:textSize="35dp"
+        android:textColor="@android:color/black"
+        android:textStyle="bold"
+        android:padding="25dp"/>
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:layout_margin="15dp">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:orientation="horizontal"
+                android:weightSum="5">
+
+                <RadioGroup
+                    android:id="@+id/rdgAanspreking"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+
+                    <RadioButton
+                        android:id="@+id/rdb1"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:tag="1"
+                        android:buttonTint="@android:color/black"
+                        android:text="Mnr."/>
+
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1" />
+
+                    <RadioButton
+                        android:id="@+id/rdb2"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:tag="2"
+                        android:buttonTint="@android:color/black"
+                        android:text="Mvr."/>
+
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1" />
+
+                    <RadioButton
+                        android:id="@+id/rdb3"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:tag="3"
+                        android:checked="true"
+                        android:buttonTint="@android:color/black"
+                        android:text="Leeg"/>
+
+                </RadioGroup>
+
+            </LinearLayout>
+
+            <EditText
+                android:id="@+id/txtVoornaam"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:inputType="textCapWords"
+                android:textSize="20dp"
+                android:hint="Voornaam"
+                android:nextFocusDown="@id/txtNaam"/>
+
+            <EditText
+                android:id="@+id/txtNaam"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:inputType="textCapWords"
+                android:textSize="20dp"
+                android:hint="Naam"
+                android:nextFocusDown="@id/txtAdres"/>
+
+            <EditText
+                android:id="@+id/txtAdres"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:inputType="textCapWords"
+                android:textSize="20dp"
+                android:hint="Adres"
+                android:nextFocusDown="@id/txtPostCode"/>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <EditText
+                    android:id="@+id/txtPostCode"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:inputType="number"
+                    android:maxLength="4"
+                    android:textSize="20dp"
+                    android:hint="PostCode"
+                    android:nextFocusDown="@id/txtWoonplaats"/>
+
+                <EditText
+                    android:id="@+id/txtWoonplaats"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:inputType="textCapWords"
+                    android:textSize="20dp"
+                    android:hint="Woonplaats"
+                    android:nextFocusDown="@id/txtEmail"/>
+
+            </LinearLayout>
+
+            <EditText
+                android:id="@+id/txtEmail"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:inputType="textCapWords"
+                android:textSize="20dp"
+                android:hint="E-Mail Adres"
+                android:nextFocusDown="@id/txtTelNr"/>
+
+            <EditText
+                android:id="@+id/txtTelNr"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:inputType="textCapWords"
+                android:textSize="20dp"
+                android:hint="Telefoon Nr."
+                android:imeOptions="actionDone"/>
+
+            <!--
+            <EditText
+                android:id="@+id/txtBtwNummer"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:inputType="textCapWords"
+                android:textSize="20dp"
+                android:hint="Btw-Nummer"
+                android:imeOptions="actionDone"/> -->
+
+        </LinearLayout>
+
+    </ScrollView>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <Button
+            android:id="@+id/btnAnnuleren"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Annuleren"
+            android:background="@drawable/border_black"
+            android:layout_weight="1"/>
+
+        <Button
+            android:id="@+id/btnToevoegen"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Toevoegen"
+            android:background="@drawable/border_black"
+            android:layout_weight="1"/>
+
+    </LinearLayout>
+
+</LinearLayout>

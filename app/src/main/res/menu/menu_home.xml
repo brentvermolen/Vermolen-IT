@@ -21,4 +21,9 @@
         android:title="Voorraad"
         app:showAsAction="never"></item>
 
+    <item
+        android:id="@+id/action_customers"
+        android:title="Klanten"
+        app:showAsAction="never"></item>
+
 </menu>
