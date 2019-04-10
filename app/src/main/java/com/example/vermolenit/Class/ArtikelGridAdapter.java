@@ -82,7 +82,7 @@ public class ArtikelGridAdapter extends BaseAdapter {
                 @Override
                 public void onClick(View v) {
                     final Artikel artikel = (Artikel)viewHolder.lblTitel.getTag();
-                    final DialogEditInteger dialogEditInteger = new DialogEditInteger(mContext, artikel.getOmschrijving() + " Toevoegen", 1, 99);
+                    final DialogEditInteger dialogEditInteger = new DialogEditInteger(mContext, artikel.getOmschrijving() + " Toevoegen", -1, 99);
                     dialogEditInteger.btnOke.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
@@ -134,7 +134,7 @@ public class ArtikelGridAdapter extends BaseAdapter {
                 @Override
                 public void onClick(View v) {
                     final Artikel artikel = (Artikel)viewHolder.lblTitel.getTag();
-                    final DialogEditInteger dialogEditInteger = new DialogEditInteger(mContext, artikel.getOmschrijving() + " Melding", 1, 10);
+                    final DialogEditInteger dialogEditInteger = new DialogEditInteger(mContext, artikel.getOmschrijving() + " Melding", -1, 10);
                     dialogEditInteger.btnOke.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
