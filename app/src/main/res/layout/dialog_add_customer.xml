@@ -142,7 +142,7 @@
                 android:id="@+id/txtEmail"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:inputType="textCapWords"
+                android:inputType="textEmailAddress"
                 android:textSize="20dp"
                 android:hint="E-Mail Adres"
                 android:nextFocusDown="@id/txtTelNr"/>

@@ -6,9 +6,12 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.NumberPicker;
+import android.widget.RadioButton;
+import android.widget.RadioGroup;
 import android.widget.TextView;
 
 import com.example.vermolenit.Model.Artikel;
+import com.example.vermolenit.Model.Eenheid;
 import com.example.vermolenit.R;
 
 public class DialogArtikelToevoegen extends AlertDialog {
@@ -18,6 +21,7 @@ public class DialogArtikelToevoegen extends AlertDialog {
     private TextView lblTitel;
     private EditText txtOmschrijving;
     private EditText txtPrijs;
+    private RadioGroup rdgEenheid;
     public Button btnToevoegen;
     public Button btnAnnuleren;
     private NumberPicker numberPickerVoorraad;
@@ -55,6 +59,8 @@ public class DialogArtikelToevoegen extends AlertDialog {
         txtOmschrijving = view.findViewById(R.id.txtOmschrijing);
         txtPrijs = view.findViewById(R.id.txtPrijs);
 
+        rdgEenheid = view.findViewById(R.id.rdgEenheid);
+
         numberPickerVoorraad = view.findViewById(R.id.numberPickerVoorraad);
         numberPickerVoorraad.setMinValue(0);
         numberPickerVoorraad.setMaxValue(maxValueVoorraad - minValueVoorraad);
@@ -62,6 +68,10 @@ public class DialogArtikelToevoegen extends AlertDialog {
         numberPickerVoorraad.setFormatter(new NumberPicker.Formatter() {
             @Override
             public String format(int index) {
+                if (index == 0){
+                    return "Onbeperkt";
+                }
+
                 return Integer.toString(index + minValueVoorraad);
             }
         });
@@ -72,6 +82,10 @@ public class DialogArtikelToevoegen extends AlertDialog {
         numberPickerMeldingOp.setFormatter(new NumberPicker.Formatter() {
             @Override
             public String format(int index) {
+                if (index == 0){
+                    return "Nooit";
+                }
+
                 return Integer.toString(index + minValueMelding);
             }
         });
@@ -83,6 +97,11 @@ public class DialogArtikelToevoegen extends AlertDialog {
     private void setEdit() {
         lblTitel.setText("Artikel Wijzigen");
         btnToevoegen.setText("Wijzigen");
+
+        int rdgId = artikel.getEenheid().getId();
+        RadioButton rdb = rdgEenheid.findViewWithTag(String.valueOf(rdgId));
+
+        rdb.setChecked(true);
 
         txtOmschrijving.setText(artikel.getOmschrijving());
         txtPrijs.setText(String.format("%.2f", artikel.getPrijs()));
@@ -104,5 +123,9 @@ public class DialogArtikelToevoegen extends AlertDialog {
 
     public int getMeldingOp(){
         return numberPickerMeldingOp.getValue() + minValueMelding;
+    }
+
+    public Eenheid getEenheid(){
+        return Eenheid.fromId(Integer.parseInt(((RadioButton) findViewById(rdgEenheid.getCheckedRadioButtonId())).getTag().toString()));
     }
 }

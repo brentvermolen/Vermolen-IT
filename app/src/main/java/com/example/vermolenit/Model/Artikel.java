@@ -3,6 +3,9 @@ package com.example.vermolenit.Model;
 import android.arch.persistence.room.Entity;
 import android.arch.persistence.room.Ignore;
 import android.arch.persistence.room.PrimaryKey;
+import android.arch.persistence.room.TypeConverters;
+
+import com.example.vermolenit.Class.EenheidConverter;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -13,6 +16,8 @@ public class Artikel {
     private int id;
     private String omschrijving;
     private double prijs;
+    @TypeConverters(EenheidConverter.class)
+    private Eenheid eenheid;
     private int voorraad; //-1 is ongelimiteerd
     private int meldingOpVoorraad; //-1 is geen melding
 
@@ -43,6 +48,14 @@ public class Artikel {
 
     public void setPrijs(double prijs) {
         this.prijs = prijs;
+    }
+
+    public Eenheid getEenheid() {
+        return eenheid;
+    }
+
+    public void setEenheid(Eenheid eenheid) {
+        this.eenheid = eenheid;
     }
 
     public int getVoorraad() {

@@ -111,7 +111,7 @@ public class ArtikelGridAdapter extends BaseAdapter {
         Artikel artikel = artikels.get(position);
 
         viewHolder.lblTitel.setText(artikel.getOmschrijving());
-        viewHolder.lblPrijs.setText(String.format("€ %.2f", artikel.getPrijs()));
+        viewHolder.lblPrijs.setText(String.format("€ %.2f %s", artikel.getPrijs(), artikel.getEenheid().getVerkort()));
 
         if (artikel.getVoorraad() == -1){
             viewHolder.lblVoorraad.setText("Onbeperkt");

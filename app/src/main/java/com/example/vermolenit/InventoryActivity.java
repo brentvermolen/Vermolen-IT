@@ -66,6 +66,7 @@ public class InventoryActivity extends AppCompatActivity {
                         artikel.setPrijs(dialogArtikelToevoegen.getPrijs());
                         artikel.setVoorraad(dialogArtikelToevoegen.getVoorraad());
                         artikel.setMeldingOpVoorraad(dialogArtikelToevoegen.getMeldingOp());
+                        artikel.setEenheid(dialogArtikelToevoegen.getEenheid());
                         dao.update(artikel);
                         ((BaseAdapter)grdArtikels.getAdapter()).notifyDataSetChanged();
                         dialogArtikelToevoegen.cancel();
@@ -105,6 +106,7 @@ public class InventoryActivity extends AppCompatActivity {
                         artikel.setPrijs(dialogArtikelToevoegen.getPrijs());
                         artikel.setVoorraad(dialogArtikelToevoegen.getVoorraad());
                         artikel.setMeldingOpVoorraad(dialogArtikelToevoegen.getMeldingOp());
+                        artikel.setEenheid(dialogArtikelToevoegen.getEenheid());
                         dao.insert(artikel);
                         DAC.Artikels.add(artikel);
                         ((BaseAdapter) grdArtikels.getAdapter()).notifyDataSetChanged();

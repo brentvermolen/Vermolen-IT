@@ -18,11 +18,11 @@ public class DialogEditInteger extends AlertDialog {
     public Button btnOke;
     public Button btnAnnuleren;
 
-    protected DialogEditInteger(Context context, String titel, int min, int max) {
-        this(context, titel, min, max, 0);
+    protected DialogEditInteger(Context context, String titel, int min, int max, String index0) {
+        this(context, titel, min, max, 0, index0);
     }
 
-    public DialogEditInteger(Context context, String titel, int min, int max, int startValue){
+    public DialogEditInteger(Context context, String titel, int min, int max, int startValue, final String index0){
         super(context);
 
         View view = View.inflate(context, R.layout.dialog_edit_integer, null);
@@ -37,7 +37,15 @@ public class DialogEditInteger extends AlertDialog {
         numberPicker.setFormatter(new NumberPicker.Formatter() {
             @Override
             public String format(int index) {
-                return Integer.toString(index + minValue);
+                if (index0 != null){
+                    if (index == 0){
+                        return index0;
+                    }else {
+                        return Integer.toString(index + minValue);
+                    }
+                }else {
+                    return Integer.toString(index + minValue);
+                }
             }
         });
         ((TextView)view.findViewById(R.id.lblTitel)).setText(titel);

@@ -14,6 +14,7 @@ import com.example.vermolenit.DB.KasticketDAO;
 import com.example.vermolenit.DB.KlantDAO;
 import com.example.vermolenit.Model.Aanspreking;
 import com.example.vermolenit.Model.Artikel;
+import com.example.vermolenit.Model.Eenheid;
 import com.example.vermolenit.Model.Kasticket;
 import com.example.vermolenit.Model.KasticketArtikel;
 import com.example.vermolenit.Model.Klant;
@@ -88,6 +89,7 @@ public class SplashScreen extends AppCompatActivity {
         kasticketDAO = database.kasticketDAO();
 
         try{
+
             Klant klant = new Klant();
             klant.setVoornaam("Brent");
             klant.setNaam("Vermolen");
@@ -97,6 +99,7 @@ public class SplashScreen extends AppCompatActivity {
             Artikel artikel = new Artikel();
             artikel.setOmschrijving("Advies aan huis");
             artikel.setPrijs(15);
+            artikel.setEenheid(Eenheid.Uur);
             artikel.setVoorraad(-1);
             artikel.setMeldingOpVoorraad(-1);
             long artikel_id = artikelDAO.insert(artikel);
@@ -104,6 +107,7 @@ public class SplashScreen extends AppCompatActivity {
             Artikel artikel2 = new Artikel();
             artikel2.setOmschrijving("USB-Stick (8Gb)");
             artikel2.setPrijs(15);
+            artikel2.setEenheid(Eenheid.Stuk);
             artikel2.setVoorraad(7);
             artikel2.setMeldingOpVoorraad(10);
             long artikel_id2 = artikelDAO.insert(artikel2);
@@ -111,6 +115,7 @@ public class SplashScreen extends AppCompatActivity {
             Artikel artikel3 = new Artikel();
             artikel3.setOmschrijving("HDMI-Kabel (3m)");
             artikel3.setPrijs(15);
+            artikel3.setEenheid(Eenheid.Stuk);
             artikel3.setVoorraad(2);
             artikel3.setMeldingOpVoorraad(2);
             long artikel_id3 = artikelDAO.insert(artikel3);
@@ -126,6 +131,19 @@ public class SplashScreen extends AppCompatActivity {
             kasticketArtikel.setHuidige_prijs(15);
             kasticketArtikel.setAantal(4);
             kasticketArtikelDAO.insert(kasticketArtikel);
+
+            Kasticket kasticket1 = new Kasticket();
+            kasticket1.setKlant_id((int)klant_id);
+            kasticket1.setDatum(Calendar.getInstance().getTime());
+            kasticket1.setBetaald(true);
+            long kasticket_id1 = kasticketDAO.insert(kasticket1);
+
+            KasticketArtikel kasticketArtikel2 = new KasticketArtikel();
+            kasticketArtikel2.setArtikel_id((int)artikel_id2);
+            kasticketArtikel2.setKasticket_id((int)kasticket_id1);
+            kasticketArtikel2.setHuidige_prijs(27);
+            kasticketArtikel2.setAantal(3);
+            kasticketArtikelDAO.insert(kasticketArtikel2);
         }catch (Exception e){ }
     }
 }

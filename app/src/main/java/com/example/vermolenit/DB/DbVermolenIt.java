@@ -10,6 +10,7 @@ import android.support.annotation.NonNull;
 
 import com.example.vermolenit.Model.Aanspreking;
 import com.example.vermolenit.Model.Artikel;
+import com.example.vermolenit.Model.Eenheid;
 import com.example.vermolenit.Model.Kasticket;
 import com.example.vermolenit.Model.KasticketArtikel;
 import com.example.vermolenit.Model.Klant;
@@ -17,7 +18,7 @@ import com.example.vermolenit.Model.Klant;
 import java.util.Calendar;
 import java.util.concurrent.Executors;
 
-@Database(entities =  {Klant.class, Artikel.class, Kasticket.class, KasticketArtikel.class}, version = 2)
+@Database(entities =  {Klant.class, Artikel.class, Kasticket.class, KasticketArtikel.class}, version = 1)
 public abstract class DbVermolenIt extends RoomDatabase {
     private static DbVermolenIt INSTANCE;
     private static final String DB_NAME = "Vermolen_IT.db";
@@ -81,7 +82,7 @@ public abstract class DbVermolenIt extends RoomDatabase {
             artikelDAO.deleteAll();
             kasticketDAO.deleteAll();
 
-            Klant klant = new Klant();
+            /*Klant klant = new Klant();
             klant.setVoornaam("Brent");
             klant.setNaam("Vermolen");
             klant.setAanspreking(Aanspreking.Meneer);
@@ -90,6 +91,7 @@ public abstract class DbVermolenIt extends RoomDatabase {
             Artikel artikel = new Artikel();
             artikel.setOmschrijving("Advies aan huis");
             artikel.setPrijs(15);
+            artikel.setEenheid(Eenheid.Uur);
             artikel.setVoorraad(-1);
             artikel.setMeldingOpVoorraad(-1);
             long artikel_id = artikelDAO.insert(artikel);
@@ -97,6 +99,7 @@ public abstract class DbVermolenIt extends RoomDatabase {
             Artikel artikel2 = new Artikel();
             artikel2.setOmschrijving("USB-Stick (8Gb)");
             artikel2.setPrijs(15);
+            artikel2.setEenheid(Eenheid.Stuk);
             artikel2.setVoorraad(7);
             artikel2.setMeldingOpVoorraad(10);
             long artikel_id2 = artikelDAO.insert(artikel2);
@@ -131,7 +134,7 @@ public abstract class DbVermolenIt extends RoomDatabase {
             kasticketArtikel2.setKasticket_id((int)kasticket_id1);
             kasticketArtikel2.setHuidige_prijs(27);
             kasticketArtikel2.setAantal(3);
-            kasticketArtikelDAO.insert(kasticketArtikel2);
+            kasticketArtikelDAO.insert(kasticketArtikel2);*/
 
             return null;
         }
