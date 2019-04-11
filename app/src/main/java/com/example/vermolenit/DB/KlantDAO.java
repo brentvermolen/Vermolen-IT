@@ -3,6 +3,7 @@ package com.example.vermolenit.DB;
 import android.arch.persistence.room.Dao;
 import android.arch.persistence.room.Insert;
 import android.arch.persistence.room.Query;
+import android.arch.persistence.room.Update;
 
 import com.example.vermolenit.Model.Klant;
 
@@ -23,4 +24,10 @@ public interface KlantDAO {
 
     @Insert
     long insert(Klant klant);
+
+    @Update
+    void update(Klant klant);
+
+    @Query("Delete From Klant Where id=(:id)")
+    void delete(int id);
 }

@@ -18,9 +18,11 @@ import com.example.vermolenit.Class.DAC;
 import com.example.vermolenit.Class.DialogKlantToevoegen;
 import com.example.vermolenit.Class.Singletons;
 import com.example.vermolenit.DB.DbVermolenIt;
+import com.example.vermolenit.DB.KlantDAO;
 import com.example.vermolenit.Model.Artikel;
 import com.example.vermolenit.Model.Kasticket;
 import com.example.vermolenit.Model.KasticketArtikel;
+import com.example.vermolenit.Model.Klant;
 
 import java.util.List;
 
@@ -34,6 +36,8 @@ public class HomeActivity extends AppCompatActivity {
     private TextView lblBetaald;
     private TextView lblOpenstaand;
     private ProgressBar prgOmzet;
+
+    KlantDAO klantDAO;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -57,6 +61,8 @@ public class HomeActivity extends AppCompatActivity {
     }
 
     private void initViews() {
+        klantDAO = DbVermolenIt.getDatabase(this).klantDAO();
+
         llVoorraad = findViewById(R.id.llVoorraad);
         horizontalScrollView = findViewById(R.id.horizontal_scrollview);
 
@@ -133,8 +139,22 @@ public class HomeActivity extends AppCompatActivity {
 
         switch (id){
             case R.id.action_add_person:
-                DialogKlantToevoegen dialogKlantToevoegen = new DialogKlantToevoegen(this);
-                //TODO
+                final DialogKlantToevoegen dialogKlantToevoegen = new DialogKlantToevoegen(this);
+                dialogKlantToevoegen.btnAnnuleren.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        dialogKlantToevoegen.cancel();
+                    }
+                });
+                dialogKlantToevoegen.btnToevoegen.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        Klant klant = dialogKlantToevoegen.getKlant();
+                        klantDAO.insert(klant);
+                        DAC.Klanten.add(klant);
+                        dialogKlantToevoegen.cancel();
+                    }
+                });
                 dialogKlantToevoegen.show();
                 break;
             case R.id.action_add:

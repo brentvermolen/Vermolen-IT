@@ -55,9 +55,22 @@ public class CustomerActivity extends AppCompatActivity {
             @Override
             public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
                 final Klant klant = (Klant) grdKlanten.getAdapter().getItem(position);
-
-                DialogKlantToevoegen dialogKlantToevoegen = new DialogKlantToevoegen(CustomerActivity.this, klant);
-                //TODO
+                final DialogKlantToevoegen dialogKlantToevoegen = new DialogKlantToevoegen(CustomerActivity.this, klant);
+                dialogKlantToevoegen.btnAnnuleren.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        dialogKlantToevoegen.cancel();
+                    }
+                });
+                dialogKlantToevoegen.btnToevoegen.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        Klant klant = dialogKlantToevoegen.getKlant();
+                        dao.update(klant);
+                        ((BaseAdapter) grdKlanten.getAdapter()).notifyDataSetChanged();
+                        dialogKlantToevoegen.cancel();
+                    }
+                });
                 dialogKlantToevoegen.show();
                 return false;
             }
@@ -76,7 +89,23 @@ public class CustomerActivity extends AppCompatActivity {
 
         switch (id){
             case R.id.action_add:
-                DialogKlantToevoegen dialogKlantToevoegen = new DialogKlantToevoegen(this);
+                final DialogKlantToevoegen dialogKlantToevoegen = new DialogKlantToevoegen(this);
+                dialogKlantToevoegen.btnAnnuleren.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        dialogKlantToevoegen.cancel();
+                    }
+                });
+                dialogKlantToevoegen.btnToevoegen.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        Klant klant = dialogKlantToevoegen.getKlant();
+                        dao.insert(klant);
+                        DAC.Klanten.add(klant);
+                        ((BaseAdapter) grdKlanten.getAdapter()).notifyDataSetChanged();
+                        dialogKlantToevoegen.cancel();
+                    }
+                });
                 dialogKlantToevoegen.show();
                 break;
             case 16908332:
