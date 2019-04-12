@@ -114,7 +114,7 @@ public class DialogArtikelToevoegen extends AlertDialog {
     }
 
     public double getPrijs(){
-        return Double.parseDouble(String.format("%.2f", Double.parseDouble(txtPrijs.getText().toString())));
+        return Double.parseDouble(txtPrijs.getText().toString().replace(",", "."));
     }
 
     public int getVoorraad(){
