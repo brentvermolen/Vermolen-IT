@@ -2,11 +2,12 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:tools="http://schemas.android.com/tools"
     android:orientation="vertical">
 
     <include
         android:id="@+id/my_toolbar"
-        layout="@layout/toolbar" />
+        layout="@layout/toolbar"/>
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -43,13 +44,19 @@
                     android:layout_marginBottom="15dp"
                     android:gravity="center">
 
-                    <TextView
-                        android:id="@+id/lblKlant"
+                    <HorizontalScrollView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="Klant naam"
-                        android:textSize="25dp"
-                        android:layout_weight="1" />
+                        android:layout_weight="1">
+
+                        <TextView
+                            android:id="@+id/lblKlant"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="Klant naam"
+                            android:textSize="25dp" />
+
+                    </HorizontalScrollView>
 
                     <ImageView
                         android:id="@+id/btnZoekKlant"
@@ -102,24 +109,16 @@
 
         </LinearLayout>
 
-        <ScrollView
+        <GridView
+            android:id="@+id/grdArtikels"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_marginTop="5dp"
             android:background="@drawable/border_black"
+            tools:listitem="@layout/artikel_kasticket"
             android:layout_weight="1">
 
-            <LinearLayout
-                android:id="@+id/llProducten"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:orientation="horizontal">
-
-
-
-            </LinearLayout>
-
-        </ScrollView>
+        </GridView>
 
         <LinearLayout
             android:layout_width="match_parent"

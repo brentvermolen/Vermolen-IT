@@ -8,26 +8,24 @@ import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.example.vermolenit.DB.ArtikelDAO;
-import com.example.vermolenit.DB.DbVermolenIt;
-import com.example.vermolenit.DB.KlantDAO;
-import com.example.vermolenit.Model.Artikel;
 import com.example.vermolenit.Model.KasticketArtikel;
-import com.example.vermolenit.Model.Klant;
 import com.example.vermolenit.R;
 
 import java.util.ArrayList;
-import java.util.Comparator;
 import java.util.List;
 
 public class ArtikelKasticketAdapter extends BaseAdapter {
     private Context mContext;
     private List<KasticketArtikel> artikels;
 
-    public ArtikelKasticketAdapter(Context context){
+    public ArtikelKasticketAdapter(Context context, List<KasticketArtikel> artikels){
         this.mContext = context;
 
-        artikels = new ArrayList<>();
+        this.artikels = artikels;
+    }
+
+    public List<KasticketArtikel> getArtikels(){
+        return artikels;
     }
 
     @Override
@@ -51,7 +49,7 @@ public class ArtikelKasticketAdapter extends BaseAdapter {
 
         public ImageView btnDelete;
         public ImageView btnMin;
-        public ImageView btnMax;
+        public ImageView btnPlus;
     }
 
     @Override
@@ -60,18 +58,22 @@ public class ArtikelKasticketAdapter extends BaseAdapter {
 
         if (convertView == null){
             LayoutInflater inflater = (LayoutInflater) mContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-            convertView = inflater.inflate(R.layout.klant_list_item, null);
+            convertView = inflater.inflate(R.layout.artikel_kasticket, null);
 
             viewHolder = new ViewHolder();
             viewHolder.lblTitel = convertView.findViewById(R.id.lblTitel);
+            viewHolder.lblAantal = convertView.findViewById(R.id.lblAantal);
 
             viewHolder.btnDelete = convertView.findViewById(R.id.btn_delete);
+            viewHolder.btnMin = convertView.findViewById(R.id.btnMin);
+            viewHolder.btnPlus = convertView.findViewById(R.id.btnPlus);
+
             viewHolder.btnDelete.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    final Klant klant = (Klant) viewHolder.lblTitel.getTag();
+                    final KasticketArtikel kasticketArtikel = (KasticketArtikel) viewHolder.lblTitel.getTag();
 
-                    final DialogYesNo dialogYesNo = new DialogYesNo(mContext, "Ben je zeker?", "Ben je zeker dat je '" + klant.toString() + "' wil verwijderen?");
+                    final DialogYesNo dialogYesNo = new DialogYesNo(mContext, "Ben je zeker?", "Ben je zeker dat je '" + kasticketArtikel.getArtikel().getOmschrijving() + "' wil verwijderen?");
                     dialogYesNo.btnYes.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
@@ -90,6 +92,31 @@ public class ArtikelKasticketAdapter extends BaseAdapter {
                 }
             });
 
+            viewHolder.btnMin.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    final KasticketArtikel kasticketArtikel = (KasticketArtikel) viewHolder.lblTitel.getTag();
+
+                    kasticketArtikel.setAantal(kasticketArtikel.getAantal() - 1);
+                    viewHolder.lblAantal.setText(String.valueOf(kasticketArtikel.getAantal()));
+
+                    if (kasticketArtikel.getAantal() == 0){
+                        viewHolder.btnMin.setEnabled(false);
+                    }
+                }
+            });
+
+            viewHolder.btnPlus.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    final KasticketArtikel kasticketArtikel = (KasticketArtikel) viewHolder.lblTitel.getTag();
+                    viewHolder.btnMin.setEnabled(true);
+
+                    kasticketArtikel.setAantal(kasticketArtikel.getAantal() + 1);
+                    viewHolder.lblAantal.setText(String.valueOf(kasticketArtikel.getAantal()));
+                }
+            });
+
             convertView.setTag(viewHolder);
         }else{
             viewHolder = (ViewHolder)convertView.getTag();
@@ -98,6 +125,7 @@ public class ArtikelKasticketAdapter extends BaseAdapter {
         KasticketArtikel artikel = (KasticketArtikel) getItem(position);
 
         viewHolder.lblTitel.setText(artikel.getArtikel().getOmschrijving());
+        viewHolder.lblAantal.setText(String.valueOf(artikel.getAantal()));
 
         viewHolder.lblTitel.setTag(artikel);
 

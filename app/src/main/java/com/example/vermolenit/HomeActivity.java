@@ -157,9 +157,6 @@ public class HomeActivity extends AppCompatActivity {
                 });
                 dialogKlantToevoegen.show();
                 break;
-            case R.id.action_add:
-                Toast.makeText(this, "Check toevoegen", Toast.LENGTH_SHORT).show();
-                break;
             case R.id.action_check_supply:
                 Intent intent = new Intent(HomeActivity.this, InventoryActivity.class);
                 startActivity(intent);
@@ -167,6 +164,10 @@ public class HomeActivity extends AppCompatActivity {
             case R.id.action_customers:
                 Intent intent1 = new Intent(HomeActivity.this, CustomerActivity.class);
                 startActivity(intent1);
+                break;
+            case R.id.action_add:
+                Intent intent2 = new Intent(HomeActivity.this, CheckActivity.class);
+                startActivity(intent2);
                 break;
             case 16908332:
                 finish();

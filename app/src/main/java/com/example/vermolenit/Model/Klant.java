@@ -124,6 +124,6 @@ public class Klant {
 
     @Override
     public String toString() {
-        return naam + " " + voornaam;
+        return aanspreking.getVerkort() + " " + naam + " " + voornaam;
     }
 }

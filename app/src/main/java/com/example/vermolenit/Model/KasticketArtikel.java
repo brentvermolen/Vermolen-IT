@@ -66,4 +66,17 @@ public class KasticketArtikel {
     public void setKasticket(Kasticket kasticket) {
         this.kasticket = kasticket;
     }
+
+    @Override
+    public boolean equals(Object obj) {
+        try{
+            KasticketArtikel kasticketArtikel = (KasticketArtikel) obj;
+
+            if (kasticketArtikel.getArtikel_id() == getArtikel_id() && kasticketArtikel.getKasticket_id() == getKasticket_id()){
+                return true;
+            }
+        }catch (Exception e) { }
+
+        return false;
+    }
 }

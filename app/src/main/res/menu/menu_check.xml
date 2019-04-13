@@ -5,10 +5,9 @@
     tools:context=".HomeActivity">
 
     <item
-        android:id="@+id/action_add"
-        android:icon="@drawable/ic_add"
-        android:title=""
-        android:visible="false"
+        android:id="@+id/action_save"
+        android:icon="@drawable/ic_check"
+        android:title="Opslaan"
         app:showAsAction="always"></item>
 
 </menu>
