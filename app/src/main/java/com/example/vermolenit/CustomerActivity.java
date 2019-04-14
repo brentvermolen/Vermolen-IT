@@ -1,5 +1,6 @@
 package com.example.vermolenit;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -8,6 +9,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.BaseAdapter;
+import android.widget.Checkable;
 import android.widget.GridView;
 import android.widget.Toast;
 
@@ -15,6 +17,7 @@ import com.example.vermolenit.Class.ArtikelGridAdapter;
 import com.example.vermolenit.Class.DAC;
 import com.example.vermolenit.Class.DialogArtikelToevoegen;
 import com.example.vermolenit.Class.DialogKlantToevoegen;
+import com.example.vermolenit.Class.DialogYesNo;
 import com.example.vermolenit.Class.KlantGridAdapter;
 import com.example.vermolenit.DB.DbVermolenIt;
 import com.example.vermolenit.DB.KlantDAO;
@@ -73,6 +76,29 @@ public class CustomerActivity extends AppCompatActivity {
                 });
                 dialogKlantToevoegen.show();
                 return false;
+            }
+        });
+        grdKlanten.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, final int position, long id) {
+                final DialogYesNo dialogYesNo = new DialogYesNo(CustomerActivity.this, "Nieuw kasticket", "Wilt u een nieuw kasticket maken met deze klant?");
+                dialogYesNo.btnNo.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        dialogYesNo.cancel();
+                    }
+                });
+                dialogYesNo.btnYes.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        Intent intent = new Intent(CustomerActivity.this, CheckActivity.class);
+                        intent.putExtra("klant_id", ((Klant) grdKlanten.getAdapter().getItem(position)).getId());
+                        startActivity(intent);
+                        dialogYesNo.cancel();
+                        finish();
+                    }
+                });
+                dialogYesNo.show();
             }
         });
     }

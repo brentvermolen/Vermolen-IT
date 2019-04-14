@@ -2,6 +2,7 @@ package com.example.vermolenit.DB;
 
 import android.arch.persistence.room.Dao;
 import android.arch.persistence.room.Insert;
+import android.arch.persistence.room.OnConflictStrategy;
 import android.arch.persistence.room.Query;
 
 import com.example.vermolenit.Model.Artikel;
@@ -22,7 +23,7 @@ public interface KasticketArtikelDAO {
     @Query("Select * From Kasticket Inner Join KasticketArtikel On id=kasticket_id Where artikel_id=(:artikel_id)")
     List<Kasticket> getKasticketsByArtikel(int artikel_id);
 
-    @Insert
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
     void insert(KasticketArtikel kasticketArtikel);
 
     @Query("Delete From KasticketArtikel Where kasticket_id=(:kasticket_id)")

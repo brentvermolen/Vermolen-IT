@@ -19,21 +19,6 @@
             android:gravity="center"
             android:orientation="horizontal">
 
-            <HorizontalScrollView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_weight="1">
-
-                <TextView
-                    android:id="@+id/lblTitel"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Artikel"
-                    android:textSize="30dp"
-                    android:textStyle="bold" />
-
-            </HorizontalScrollView>
-
             <ImageView
                 android:id="@+id/btnMin"
                 android:layout_width="wrap_content"
@@ -53,8 +38,22 @@
                 android:id="@+id/btnPlus"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
-                android:layout_marginRight="15dp"
+                android:layout_marginRight="10dp"
                 android:src="@drawable/ic_add" />
+
+            <HorizontalScrollView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1">
+
+                <TextView
+                    android:id="@+id/lblTitel"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Artikel"
+                    android:textSize="25dp" />
+
+            </HorizontalScrollView>
 
             <ImageView
                 android:id="@+id/btn_delete"

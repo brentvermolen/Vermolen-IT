@@ -52,6 +52,10 @@ public class SplashScreen extends AppCompatActivity {
                     klant.setKasticketen(Methodes.getKasticketByKlant(DAC.Kastickets, klant));
                 }
 
+                for (Kasticket kasticket : DAC.Kastickets){
+                    kasticket.setKlant(Methodes.getKlantById(DAC.Klanten, kasticket.getKlant_id()));
+                }
+
                 List<KasticketArtikel> lstAf;
                 for (KasticketArtikel ka : DAC.KasticketArtikels){
                     Kasticket kasticket = Methodes.getKasticketById(DAC.Kastickets, ka.getKasticket_id());
@@ -89,61 +93,40 @@ public class SplashScreen extends AppCompatActivity {
         kasticketDAO = database.kasticketDAO();
 
         try{
-
-            Klant klant = new Klant();
-            klant.setVoornaam("Brent");
-            klant.setNaam("Vermolen");
-            klant.setAanspreking(Aanspreking.Meneer);
-            long klant_id = klantDAO.insert(klant);
-
             Artikel artikel = new Artikel();
             artikel.setOmschrijving("Advies aan huis");
-            artikel.setPrijs(15);
-            artikel.setEenheid(Eenheid.Uur);
+            artikel.setPrijs(8);
+            artikel.setEenheid(Eenheid.Kwart);
             artikel.setVoorraad(-1);
             artikel.setMeldingOpVoorraad(-1);
             long artikel_id = artikelDAO.insert(artikel);
 
             Artikel artikel2 = new Artikel();
             artikel2.setOmschrijving("USB-Stick (8Gb)");
-            artikel2.setPrijs(15);
+            artikel2.setPrijs(8);
             artikel2.setEenheid(Eenheid.Stuk);
-            artikel2.setVoorraad(7);
-            artikel2.setMeldingOpVoorraad(10);
+            artikel2.setVoorraad(0);
+            artikel2.setMeldingOpVoorraad(-1);
             long artikel_id2 = artikelDAO.insert(artikel2);
 
             Artikel artikel3 = new Artikel();
-            artikel3.setOmschrijving("HDMI-Kabel (3m)");
-            artikel3.setPrijs(15);
+            artikel3.setOmschrijving("Chromecast");
+            artikel3.setPrijs(39);
             artikel3.setEenheid(Eenheid.Stuk);
-            artikel3.setVoorraad(2);
-            artikel3.setMeldingOpVoorraad(2);
+            artikel3.setVoorraad(0);
+            artikel3.setMeldingOpVoorraad(-1);
             long artikel_id3 = artikelDAO.insert(artikel3);
 
-            Kasticket kasticket = new Kasticket();
-            kasticket.setKlant_id((int)klant_id);
-            kasticket.setDatum(Calendar.getInstance().getTime());
-            long kasticket_id = kasticketDAO.insert(kasticket);
-
-            KasticketArtikel kasticketArtikel = new KasticketArtikel();
-            kasticketArtikel.setArtikel_id((int)artikel_id);
-            kasticketArtikel.setKasticket_id((int)kasticket_id);
-            kasticketArtikel.setHuidige_prijs(15);
-            kasticketArtikel.setAantal(4);
-            kasticketArtikelDAO.insert(kasticketArtikel);
-
-            Kasticket kasticket1 = new Kasticket();
-            kasticket1.setKlant_id((int)klant_id);
-            kasticket1.setDatum(Calendar.getInstance().getTime());
-            kasticket1.setBetaald(true);
-            long kasticket_id1 = kasticketDAO.insert(kasticket1);
-
-            KasticketArtikel kasticketArtikel2 = new KasticketArtikel();
-            kasticketArtikel2.setArtikel_id((int)artikel_id2);
-            kasticketArtikel2.setKasticket_id((int)kasticket_id1);
-            kasticketArtikel2.setHuidige_prijs(27);
-            kasticketArtikel2.setAantal(3);
-            kasticketArtikelDAO.insert(kasticketArtikel2);
+            Klant klant = new Klant();
+            klant.setAanspreking(Aanspreking.Mevrouw);
+            klant.setNaam("Colson");
+            klant.setVoornaam("Lieze");
+            klant.setEmail("lieze_colson@hotmail.com");
+            klant.setTel_nr("0476798346");
+            klant.setWoonplaats("Vorselaar");
+            klant.setPostcode(2390);
+            klant.setAdres("Kweek 7");
+            klantDAO.insert(klant);
         }catch (Exception e){ }
     }
 }

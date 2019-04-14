@@ -18,8 +18,15 @@ public class ArtikelKasticketAdapter extends BaseAdapter {
     private Context mContext;
     private List<KasticketArtikel> artikels;
 
-    public ArtikelKasticketAdapter(Context context, List<KasticketArtikel> artikels){
+    private TextView lblTotaal;
+    private TextView lblSubtotaal;
+    private TextView lblBtw;
+
+    public ArtikelKasticketAdapter(Context context, List<KasticketArtikel> artikels, TextView lblTotaal, TextView lblSubtotaal, TextView lblBtw){
         this.mContext = context;
+        this.lblTotaal = lblTotaal;
+        this.lblSubtotaal = lblSubtotaal;
+        this.lblBtw = lblBtw;
 
         this.artikels = artikels;
     }
@@ -77,8 +84,11 @@ public class ArtikelKasticketAdapter extends BaseAdapter {
                     dialogYesNo.btnYes.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
-
+                            final KasticketArtikel kasticketArtikel = (KasticketArtikel) viewHolder.lblTitel.getTag();
+                            artikels.remove(kasticketArtikel);
+                            notifyDataSetChanged();
                             dialogYesNo.cancel();
+                            berekenPrijs();
                         }
                     });
                     dialogYesNo.btnNo.setOnClickListener(new View.OnClickListener() {
@@ -103,6 +113,8 @@ public class ArtikelKasticketAdapter extends BaseAdapter {
                     if (kasticketArtikel.getAantal() == 0){
                         viewHolder.btnMin.setEnabled(false);
                     }
+
+                    berekenPrijs();
                 }
             });
 
@@ -114,6 +126,8 @@ public class ArtikelKasticketAdapter extends BaseAdapter {
 
                     kasticketArtikel.setAantal(kasticketArtikel.getAantal() + 1);
                     viewHolder.lblAantal.setText(String.valueOf(kasticketArtikel.getAantal()));
+
+                    berekenPrijs();
                 }
             });
 
@@ -130,5 +144,18 @@ public class ArtikelKasticketAdapter extends BaseAdapter {
         viewHolder.lblTitel.setTag(artikel);
 
         return convertView;
+    }
+
+    public void berekenPrijs(){
+        double prijs = 0f;
+
+        for (KasticketArtikel kasticketArtikel : artikels){
+            prijs += kasticketArtikel.getArtikel().getPrijs() * kasticketArtikel.getAantal();
+        }
+
+        lblTotaal.setText(String.format("€ %.2f", prijs));
+        double sub = prijs / 1.21;
+        lblSubtotaal.setText(String.format("€ %.2f", sub));
+        lblBtw.setText(String.format("€ %.2f", prijs - sub));
     }
 }

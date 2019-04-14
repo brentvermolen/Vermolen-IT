@@ -2,7 +2,7 @@ package com.example.vermolenit.Model;
 
 public enum Eenheid {
     Stuk(1, "Per Stuk"),
-    Uur(2, "Per Uur");
+    Kwart(2, "Per 15min.");
 
     Eenheid(int id, String verkort){
         this.id = id;

@@ -84,6 +84,6 @@ public class Artikel {
 
     @Override
     public String toString() {
-        return omschrijving;
+        return omschrijving + " (" + eenheid.getVerkort() + ")";
     }
 }

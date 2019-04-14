@@ -91,7 +91,7 @@ public abstract class DbVermolenIt extends RoomDatabase {
             Artikel artikel = new Artikel();
             artikel.setOmschrijving("Advies aan huis");
             artikel.setPrijs(15);
-            artikel.setEenheid(Eenheid.Uur);
+            artikel.setEenheid(Eenheid.Kwart);
             artikel.setVoorraad(-1);
             artikel.setMeldingOpVoorraad(-1);
             long artikel_id = artikelDAO.insert(artikel);

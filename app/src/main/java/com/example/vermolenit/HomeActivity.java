@@ -138,25 +138,6 @@ public class HomeActivity extends AppCompatActivity {
         int id = item.getItemId();
 
         switch (id){
-            case R.id.action_add_person:
-                final DialogKlantToevoegen dialogKlantToevoegen = new DialogKlantToevoegen(this);
-                dialogKlantToevoegen.btnAnnuleren.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        dialogKlantToevoegen.cancel();
-                    }
-                });
-                dialogKlantToevoegen.btnToevoegen.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        Klant klant = dialogKlantToevoegen.getKlant();
-                        klantDAO.insert(klant);
-                        DAC.Klanten.add(klant);
-                        dialogKlantToevoegen.cancel();
-                    }
-                });
-                dialogKlantToevoegen.show();
-                break;
             case R.id.action_check_supply:
                 Intent intent = new Intent(HomeActivity.this, InventoryActivity.class);
                 startActivity(intent);
@@ -168,6 +149,10 @@ public class HomeActivity extends AppCompatActivity {
             case R.id.action_add:
                 Intent intent2 = new Intent(HomeActivity.this, CheckActivity.class);
                 startActivity(intent2);
+                break;
+            case R.id.action_kastickets:
+                Intent intent3 = new Intent(HomeActivity.this, KasticketActivity.class);
+                startActivity(intent3);
                 break;
             case 16908332:
                 finish();
@@ -183,5 +168,6 @@ public class HomeActivity extends AppCompatActivity {
     protected void onResume() {
         super.onResume();
         checkVoorraad();
+        checkOmzet();
     }
 }

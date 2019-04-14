@@ -13,7 +13,7 @@ public class DialogYesNo extends AlertDialog {
     public Button btnYes;
     public Button btnNo;
 
-    protected DialogYesNo(Context context, String titel, String question) {
+    public DialogYesNo(Context context, String titel, String question) {
         super(context);
 
         View view = View.inflate(context, R.layout.dialog_yes_no, null);

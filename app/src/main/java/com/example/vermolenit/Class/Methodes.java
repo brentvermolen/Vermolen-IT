@@ -40,4 +40,14 @@ public class Methodes {
 
         return null;
     }
+
+    public static Klant getKlantById(List<Klant> klanten, int klant_id) {
+        for (Klant klant : klanten){
+            if (klant.getId() == klant_id){
+                return klant;
+            }
+        }
+
+        return null;
+    }
 }

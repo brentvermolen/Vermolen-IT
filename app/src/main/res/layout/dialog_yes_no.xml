@@ -52,7 +52,7 @@
             android:id="@+id/btnYes"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Yes"
+            android:text="Ja"
             android:background="@drawable/border_black"
             android:layout_weight="1"/>
 
