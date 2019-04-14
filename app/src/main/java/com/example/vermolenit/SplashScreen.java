@@ -40,6 +40,10 @@ public class SplashScreen extends AppCompatActivity {
 
         //insertDbData();
 
+        doAsync();
+    }
+
+    private void doAsync() {
         new AsyncTask<Void, Void, Void>(){
             @Override
             protected Void doInBackground(Void... voids) {
