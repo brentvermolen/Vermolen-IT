@@ -4,6 +4,7 @@ import android.arch.persistence.room.Dao;
 import android.arch.persistence.room.Insert;
 import android.arch.persistence.room.OnConflictStrategy;
 import android.arch.persistence.room.Query;
+import android.arch.persistence.room.Update;
 
 import com.example.vermolenit.Model.Kasticket;
 
@@ -25,4 +26,7 @@ public interface KasticketDAO {
 
     @Query("Delete From Kasticket Where id=(:id)")
     void delete(int id);
+
+    @Update
+    void update(Kasticket kasticket);
 }

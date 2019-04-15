@@ -56,6 +56,21 @@ public class KlantGridAdapter extends BaseAdapter {
         return klanten.get(position).getId();
     }
 
+    public void update() {
+        klanten.sort(new Comparator<Klant>() {
+            @Override
+            public int compare(Klant o1, Klant o2) {
+                if (o1.getNaam().equals(o2.getNaam())){
+                    return o1.getVoornaam().compareTo(o2.getVoornaam());
+                }
+
+                return o1.getNaam().compareTo(o2.getNaam());
+            }
+        });
+
+        notifyDataSetChanged();
+    }
+
     private class ViewHolder {
         public TextView lblTitel;
         public TextView lblWoonplaats;

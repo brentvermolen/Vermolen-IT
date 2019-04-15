@@ -8,6 +8,7 @@ import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.example.vermolenit.CheckActivity;
 import com.example.vermolenit.Model.KasticketArtikel;
 import com.example.vermolenit.R;
 
@@ -22,11 +23,11 @@ public class ArtikelKasticketAdapter extends BaseAdapter {
     private TextView lblSubtotaal;
     private TextView lblBtw;
 
-    public ArtikelKasticketAdapter(Context context, List<KasticketArtikel> artikels, TextView lblTotaal, TextView lblSubtotaal, TextView lblBtw){
+    public ArtikelKasticketAdapter(Context context, List<KasticketArtikel> artikels){
         this.mContext = context;
-        this.lblTotaal = lblTotaal;
-        this.lblSubtotaal = lblSubtotaal;
-        this.lblBtw = lblBtw;
+        this.lblTotaal = ((CheckActivity)context).lblTotaal;
+        this.lblSubtotaal = ((CheckActivity)context).lblSubtotaal;
+        this.lblBtw = ((CheckActivity)context).lblBtw;
 
         this.artikels = artikels;
     }
@@ -48,6 +49,11 @@ public class ArtikelKasticketAdapter extends BaseAdapter {
     @Override
     public long getItemId(int position) {
         return artikels.get(position).getArtikel().getId();
+    }
+
+    public void update() {
+        berekenPrijs();
+        notifyDataSetChanged();
     }
 
     private class ViewHolder {
@@ -110,7 +116,7 @@ public class ArtikelKasticketAdapter extends BaseAdapter {
                     kasticketArtikel.setAantal(kasticketArtikel.getAantal() - 1);
                     viewHolder.lblAantal.setText(String.valueOf(kasticketArtikel.getAantal()));
 
-                    if (kasticketArtikel.getAantal() == 0){
+                    if (kasticketArtikel.getAantal() == 1){
                         viewHolder.btnMin.setEnabled(false);
                     }
 
@@ -140,6 +146,9 @@ public class ArtikelKasticketAdapter extends BaseAdapter {
 
         viewHolder.lblTitel.setText(artikel.getArtikel().getOmschrijving());
         viewHolder.lblAantal.setText(String.valueOf(artikel.getAantal()));
+        if (artikel.getAantal() == 1){
+            viewHolder.btnMin.setEnabled(false);
+        }
 
         viewHolder.lblTitel.setTag(artikel);
 

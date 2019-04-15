@@ -31,4 +31,7 @@ public interface ArtikelDAO {
 
     @Query("Delete From Artikel Where id=(:id)")
     void delete(int id);
+
+    @Query("Update Artikel Set voorraad=(:voorraad) Where id=(:id)")
+    void updateVoorraad(int id, int voorraad);
 }

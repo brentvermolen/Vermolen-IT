@@ -70,7 +70,7 @@ public class CustomerActivity extends AppCompatActivity {
                     public void onClick(View v) {
                         Klant klant = dialogKlantToevoegen.getKlant();
                         dao.update(klant);
-                        ((BaseAdapter) grdKlanten.getAdapter()).notifyDataSetChanged();
+                        ((KlantGridAdapter) grdKlanten.getAdapter()).update();
                         dialogKlantToevoegen.cancel();
                     }
                 });
@@ -126,9 +126,9 @@ public class CustomerActivity extends AppCompatActivity {
                     @Override
                     public void onClick(View v) {
                         Klant klant = dialogKlantToevoegen.getKlant();
-                        dao.insert(klant);
+                        klant.setId((int)dao.insert(klant));
                         DAC.Klanten.add(klant);
-                        ((BaseAdapter) grdKlanten.getAdapter()).notifyDataSetChanged();
+                        ((KlantGridAdapter) grdKlanten.getAdapter()).update();
                         dialogKlantToevoegen.cancel();
                     }
                 });

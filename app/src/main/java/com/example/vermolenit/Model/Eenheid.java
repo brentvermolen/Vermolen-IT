@@ -1,15 +1,17 @@
 package com.example.vermolenit.Model;
 
 public enum Eenheid {
-    Stuk(1, "Per Stuk"),
-    Kwart(2, "Per 15min.");
+    Stuk(1, "Per Stuk", "stuks"),
+    Kwart(2, "Per 15min.", " x 15min.");
 
-    Eenheid(int id, String verkort){
+    Eenheid(int id, String volledig, String verkort){
         this.id = id;
+        this.volledig = volledig;
         this.verkort = verkort;
     }
 
     private int id;
+    private String volledig;
     private String verkort;
 
     @Override
@@ -17,9 +19,10 @@ public enum Eenheid {
         return super.toString();
     }
 
-    public String getVerkort(){
-        return verkort;
+    public String getVolledig(){
+        return volledig;
     }
+    public String getVerkort() { return verkort; }
     public int getId() { return id; }
 
     public static Eenheid fromId(int id){

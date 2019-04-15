@@ -1,7 +1,6 @@
 package com.example.vermolenit.Class;
 
 import android.content.Context;
-import android.content.DialogInterface;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -49,6 +48,17 @@ public class ArtikelGridAdapter extends BaseAdapter {
     @Override
     public long getItemId(int position) {
         return artikels.get(position).getId();
+    }
+
+    public void update() {
+        artikels.sort(new Comparator<Artikel>() {
+            @Override
+            public int compare(Artikel o1, Artikel o2) {
+                return o1.getOmschrijving().compareTo(o2.getOmschrijving());
+            }
+        });
+
+        notifyDataSetChanged();
     }
 
     private class ViewHolder {
@@ -111,7 +121,7 @@ public class ArtikelGridAdapter extends BaseAdapter {
         Artikel artikel = artikels.get(position);
 
         viewHolder.lblTitel.setText(artikel.getOmschrijving());
-        viewHolder.lblPrijs.setText(String.format("€ %.2f %s", artikel.getPrijs(), artikel.getEenheid().getVerkort()));
+        viewHolder.lblPrijs.setText(String.format("€ %.2f %s", artikel.getPrijs(), artikel.getEenheid().getVolledig()));
 
         if (artikel.getVoorraad() == -1){
             viewHolder.lblVoorraad.setText("Onbeperkt");

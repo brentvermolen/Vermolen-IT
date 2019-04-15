@@ -1,11 +1,15 @@
 package com.example.vermolenit;
 
+import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.webkit.WebResourceRequest;
+import android.webkit.WebView;
+import android.webkit.WebViewClient;
 import android.widget.AdapterView;
 import android.widget.BaseAdapter;
 import android.widget.Button;
@@ -14,6 +18,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.vermolenit.Class.ArtikelGridAdapter;
 import com.example.vermolenit.Class.ArtikelKasticketAdapter;
 import com.example.vermolenit.Class.DAC;
 import com.example.vermolenit.Class.DialogEditDate;
@@ -22,6 +27,7 @@ import com.example.vermolenit.Class.DialogSelectKlant;
 import com.example.vermolenit.Class.DialogYesNo;
 import com.example.vermolenit.Class.KasticketGridAdapter;
 import com.example.vermolenit.Class.Methodes;
+import com.example.vermolenit.DB.ArtikelDAO;
 import com.example.vermolenit.DB.DbVermolenIt;
 import com.example.vermolenit.DB.KasticketArtikelDAO;
 import com.example.vermolenit.DB.KasticketDAO;
@@ -52,11 +58,12 @@ public class CheckActivity extends AppCompatActivity {
     private Button btnArtikelToevoegen;
     private GridView grdArtikels;
 
-    private TextView lblTotaal;
-    private TextView lblSubtotaal;
-    private TextView lblBtw;
+    public TextView lblTotaal;
+    public TextView lblSubtotaal;
+    public TextView lblBtw;
     private KasticketDAO kasticketDAO;
     private KasticketArtikelDAO kasticketArtikelDAO;
+    private ArtikelDAO artikelDAO;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -92,9 +99,8 @@ public class CheckActivity extends AppCompatActivity {
                 lblKlant.setText(kasticket.getKlant().toString());
                 lblDatum.setText(new SimpleDateFormat("dd/MM/yyyy").format(kasticket.getDatum()));
                 kasticketArtikels = kasticket.getKasticketArtikels();
-                grdArtikels.setAdapter(new ArtikelKasticketAdapter(this, kasticketArtikels, lblTotaal, lblSubtotaal, lblBtw));
-                ((BaseAdapter)grdArtikels.getAdapter()).notifyDataSetChanged();
-                ((ArtikelKasticketAdapter)grdArtikels.getAdapter()).berekenPrijs();
+                grdArtikels.setAdapter(new ArtikelKasticketAdapter(this, kasticketArtikels));
+                ((ArtikelKasticketAdapter)grdArtikels.getAdapter()).update();
             }
         }catch (NullPointerException ex){ }
     }
@@ -102,6 +108,8 @@ public class CheckActivity extends AppCompatActivity {
     private void initViews() {
         kasticketDAO = DbVermolenIt.getDatabase(this).kasticketDAO();
         kasticketArtikelDAO = DbVermolenIt.getDatabase(this).kasticketArtikelDAO();
+        artikelDAO = DbVermolenIt.getDatabase(this).artikelDAO();
+
         kasticket = new Kasticket();
         kasticket.setKlant_id(-1);
         kasticketArtikels = new ArrayList<>();
@@ -126,7 +134,7 @@ public class CheckActivity extends AppCompatActivity {
 
         btnArtikelToevoegen = findViewById(R.id.btnArtikelToevoegen);
         grdArtikels = findViewById(R.id.grdArtikels);
-        ArtikelKasticketAdapter adapter = new ArtikelKasticketAdapter(this, kasticketArtikels, lblTotaal, lblSubtotaal, lblBtw);
+        ArtikelKasticketAdapter adapter = new ArtikelKasticketAdapter(this, kasticketArtikels);
         kasticket.setKasticketArtikels(kasticketArtikels);
         grdArtikels.setAdapter(adapter);
     }
@@ -195,18 +203,13 @@ public class CheckActivity extends AppCompatActivity {
                             kasticketArtikel.setAantal(1);
                             kasticketArtikels.add(kasticketArtikel);
                         }
-                        ((BaseAdapter)grdArtikels.getAdapter()).notifyDataSetChanged();
-                        berekenPrijs();
+                        ((ArtikelKasticketAdapter)grdArtikels.getAdapter()).update();
                         dialogSelectArtikel.cancel();
-                        ((ArtikelKasticketAdapter)grdArtikels.getAdapter()).berekenPrijs();
                     }
                 });
                 dialogSelectArtikel.show();
             }
         });
-    }
-
-    private void berekenPrijs(){
     }
 
     @Override
@@ -219,36 +222,61 @@ public class CheckActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
 
-        switch (id){
-            case R.id.action_continue:
-                Toast.makeText(this, "Doorgaan naar print", Toast.LENGTH_SHORT).show();
-                break;
-            case R.id.action_save:
-                if (kasticket.getKlant_id() == -1){
-                    Toast.makeText(this, "Je moet een klant selecteren", Toast.LENGTH_SHORT).show();
-                    return false;
-                }
+        if (kasticket.getKlant_id() == -1){
+            Toast.makeText(this, "Je moet een klant selecteren", Toast.LENGTH_SHORT).show();
+            return false;
+        }
 
-                if (kasticket.getKasticketArtikels().size() == 0) {
-                    Toast.makeText(this, "Kasticket is leeg", Toast.LENGTH_SHORT).show();
-                    return false;
-                }
+        if (kasticket.getKasticketArtikels().size() == 0) {
+            Toast.makeText(this, "Kasticket is leeg", Toast.LENGTH_SHORT).show();
+            return false;
+        }
 
-                kasticket.setBetaald(false);
-                kasticket.setId((int)kasticketDAO.insert(kasticket));
-                for (KasticketArtikel ka : kasticket.getKasticketArtikels()){
-                    ka.setHuidige_prijs(ka.getArtikel().getPrijs());
-                    ka.setKasticket_id(kasticket.getId());
-                    kasticketArtikelDAO.insert(ka);
-                    if (DAC.KasticketArtikels.contains(ka)){
-                        DAC.KasticketArtikels.add(ka);
+        kasticket.setBetaald(false);
+        kasticket.setId((int)kasticketDAO.insert(kasticket));
+        for (KasticketArtikel ka : kasticket.getKasticketArtikels()){
+            ka.setHuidige_prijs(ka.getArtikel().getPrijs());
+            ka.setKasticket_id(kasticket.getId());
+            kasticketArtikelDAO.insert(ka);
+            if (!DAC.KasticketArtikels.contains(ka)){
+                DAC.KasticketArtikels.add(ka);
+
+                if (ka.getArtikel().getVoorraad() > 0){
+                    if (ka.getArtikel().getVoorraad() - ka.getAantal() >= 0){
+                        artikelDAO.updateVoorraad(ka.getArtikel_id(), ka.getArtikel().getVoorraad() - ka.getAantal());
+                        ka.getArtikel().setVoorraad(ka.getArtikel().getVoorraad() - ka.getAantal());
+                    }else{
+                        artikelDAO.updateVoorraad(ka.getArtikel_id(), 0);
+                        ka.getArtikel().setVoorraad(0);
                     }
                 }
-                if (!DAC.Kastickets.contains(kasticket)){
-                    DAC.Kastickets.add(kasticket);
-                }
-                finish();
+            }
+        }
+        if (!DAC.Kastickets.contains(kasticket)){
+            DAC.Kastickets.add(kasticket);
+        }
+
+        switch (id){
+            case R.id.action_continue:
+                WebView webView = new WebView(this);
+                webView.setWebViewClient(new WebViewClient(){
+                    @Override
+                    public boolean shouldOverrideUrlLoading(WebView view, WebResourceRequest request) {
+                        return false;
+                    }
+                });
+
+                String htmlChanges = Methodes.getIntroHtml() + Methodes.getMiddleHtml(kasticket) + Methodes.getEndHtml();
+
+                webView.loadDataWithBaseURL(null, htmlChanges, "text/HTML", "UTF-8", null);
+                kasticket.setBetaald(true);
+                kasticketDAO.update(kasticket);
+                Methodes.printText(CheckActivity.this, webView, "Kasticket " + String.format("%06d", kasticket.getId()));
+                break;
+            case R.id.action_save:
                 Toast.makeText(this, "Concept opgeslagen", Toast.LENGTH_SHORT).show();
+
+                finish();
                 break;
             case 16908332:
                 onBackPressed();
@@ -282,5 +310,13 @@ public class CheckActivity extends AppCompatActivity {
             }
         });
         dialogYesNo.show();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        if (kasticket.isBetaald()){
+            finish();
+        }
     }
 }

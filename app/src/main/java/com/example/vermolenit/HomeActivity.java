@@ -8,6 +8,9 @@ import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.AdapterView;
+import android.widget.BaseAdapter;
+import android.widget.GridView;
 import android.widget.HorizontalScrollView;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
@@ -16,6 +19,8 @@ import android.widget.Toast;
 
 import com.example.vermolenit.Class.DAC;
 import com.example.vermolenit.Class.DialogKlantToevoegen;
+import com.example.vermolenit.Class.DialogYesNo;
+import com.example.vermolenit.Class.KasticketGridAdapter;
 import com.example.vermolenit.Class.Singletons;
 import com.example.vermolenit.DB.DbVermolenIt;
 import com.example.vermolenit.DB.KlantDAO;
@@ -36,6 +41,8 @@ public class HomeActivity extends AppCompatActivity {
     private TextView lblBetaald;
     private TextView lblOpenstaand;
     private ProgressBar prgOmzet;
+
+    GridView grdKasticket;
 
     KlantDAO klantDAO;
 
@@ -70,13 +77,49 @@ public class HomeActivity extends AppCompatActivity {
         lblBetaald = findViewById(R.id.lblBetaald);
         lblOpenstaand = findViewById(R.id.lblOpenstaand);
         prgOmzet = findViewById(R.id.prgOmzet);
+
+        grdKasticket = findViewById(R.id.grdKastickets);
+        grdKasticket.setAdapter(new KasticketGridAdapter(this));
     }
 
     private void handleEvents() {
+        grdKasticket.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, final int position, long id) {
+                final Kasticket kasticket = (Kasticket) grdKasticket.getAdapter().getItem(position);
+                if (!kasticket.isBetaald()){
+                    final DialogYesNo dialogYesNo = new DialogYesNo(HomeActivity.this, "Kasticket Wijzigen", "Wilt u het concept openen?");
+                    dialogYesNo.btnNo.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            dialogYesNo.cancel();
+                        }
+                    });
+                    dialogYesNo.btnYes.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            Intent intent = new Intent(HomeActivity.this, CheckActivity.class);
+                            intent.putExtra("kasticket_id", kasticket.getId());
+                            startActivity(intent);
+                            dialogYesNo.cancel();
+                        }
+                    });
+                    dialogYesNo.show();
+                }
+            }
+        });
+        grdKasticket.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
+            @Override
+            public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
+                final Kasticket kasticket = (Kasticket) grdKasticket.getAdapter().getItem(position);
 
+                //TODO: Doorgaan naar print
+                return true;
+            }
+        });
     }
 
-    private void checkVoorraad() {
+    public void checkVoorraad() {
         List<Artikel> voorraadTekort = DbVermolenIt.getDatabase(this).artikelDAO().getWhereVoorraadIsLow();
         llVoorraad.removeAllViews();
 
@@ -105,7 +148,7 @@ public class HomeActivity extends AppCompatActivity {
         }
     }
 
-    private void checkOmzet(){
+    public void checkOmzet(){
         double openstaand = 0;
         double betaald = 0;
 
@@ -150,10 +193,6 @@ public class HomeActivity extends AppCompatActivity {
                 Intent intent2 = new Intent(HomeActivity.this, CheckActivity.class);
                 startActivity(intent2);
                 break;
-            case R.id.action_kastickets:
-                Intent intent3 = new Intent(HomeActivity.this, KasticketActivity.class);
-                startActivity(intent3);
-                break;
             case 16908332:
                 finish();
                 break;
@@ -169,5 +208,6 @@ public class HomeActivity extends AppCompatActivity {
         super.onResume();
         checkVoorraad();
         checkOmzet();
+        ((KasticketGridAdapter)grdKasticket.getAdapter()).update();
     }
 }

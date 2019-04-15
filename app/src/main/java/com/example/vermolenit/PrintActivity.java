@@ -1,72 +1,73 @@
-package com.example.vermolenit.Class;
+package com.example.vermolenit;
 
-import android.content.Context;
-import android.os.Build;
-import android.print.PrintAttributes;
-import android.print.PrintDocumentAdapter;
-import android.print.PrintManager;
+import android.support.v7.app.AppCompatActivity;
+import android.os.Bundle;
+import android.view.View;
+import android.webkit.WebResourceRequest;
 import android.webkit.WebView;
+import android.webkit.WebViewClient;
 import android.widget.Toast;
 
-import com.example.vermolenit.Model.Artikel;
+import com.example.vermolenit.Class.DAC;
+import com.example.vermolenit.Class.Methodes;
+import com.example.vermolenit.DB.DbVermolenIt;
+import com.example.vermolenit.DB.KasticketDAO;
 import com.example.vermolenit.Model.Kasticket;
 import com.example.vermolenit.Model.KasticketArtikel;
-import com.example.vermolenit.Model.Klant;
-import com.example.vermolenit.R;
 
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.List;
 
-import static android.content.Context.PRINT_SERVICE;
+public class PrintActivity extends AppCompatActivity {
 
-public class Methodes {
-    public static List<Kasticket> getKasticketByKlant(List<Kasticket> kastickets, Klant klant){
-        List<Kasticket> kasticketen = new ArrayList<>();
+    WebView webView;
+    Kasticket kasticket;
+    KasticketDAO kasticketDAO;
 
-        for (Kasticket k : kastickets){
-            if (k.getKlant_id() == klant.getId()){
-                kasticketen.add(k);
-                k.setKlant(klant);
-            }
-        }
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_print);
 
-        return kasticketen;
-    }
+        initViews();
 
-    public static Artikel getArtikelById(List<Artikel> artikels, int artikel_id) {
-        for (Artikel artikel : artikels){
-            if (artikel.getId() == artikel_id){
-                return artikel;
-            }
-        }
+        int kasticket_id = getIntent().getIntExtra("kasticket_id", -1);
+        kasticketDAO = DbVermolenIt.getDatabase(this).kasticketDAO();
 
-        return null;
-    }
-
-    public static Kasticket getKasticketById(List<Kasticket> kastickets, int kasticket_id) {
-        for (Kasticket kasticket : kastickets) {
+        for (Kasticket kasticket : DAC.Kastickets){
             if (kasticket.getId() == kasticket_id){
-                return kasticket;
+                this.kasticket = kasticket;
             }
         }
 
-        return null;
-    }
-
-    public static Klant getKlantById(List<Klant> klanten, int klant_id) {
-        for (Klant klant : klanten){
-            if (klant.getId() == klant_id){
-                return klant;
-            }
+        if (kasticket_id == -1 || kasticket == null){
+            Toast.makeText(this, "Geen kasticket gevonden", Toast.LENGTH_SHORT).show();
+            finish();
         }
 
-        return null;
+        vulWebView();
+    }
+
+    private void initViews() {
+        webView = findViewById(R.id.webView);
     }
 
 
 
-    public static String getIntroHtml(){
+    private void vulWebView(){
+        webView.setWebViewClient(new WebViewClient(){
+            @Override
+            public boolean shouldOverrideUrlLoading(WebView view, WebResourceRequest request) {
+                return false;
+            }
+        });
+
+        String htmlChanges = getIntroHtml() + getMiddleHtml(kasticket) + getEndHtml();
+
+        webView.loadDataWithBaseURL(null, htmlChanges, "text/HTML", "UTF-8", null);
+        Methodes.printText(PrintActivity.this, webView, "Kasticket " + String.format("%06d", kasticket.getId()));
+    }
+
+    private String getIntroHtml(){
         String html = "<!DOCTYPE html>\n" +
                 "<html>\n" +
                 "<head>\n" +
@@ -302,7 +303,7 @@ public class Methodes {
         return html;
     }
 
-    public static String getMiddleHtml(Kasticket kasticket){
+    public String getMiddleHtml(Kasticket kasticket){
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd/MM/yyyy");
 
         String middle = "<div class=\"middle\">\n" +
@@ -357,7 +358,7 @@ public class Methodes {
         return middle;
     }
 
-    public static String getEndHtml() {
+    public String getEndHtml() {
         return "\n" +
                 "    <div class=\"footer\">\n" +
                 "        <p class=\"one_third first\">Vermolen-IT</p>\n" +
@@ -365,20 +366,5 @@ public class Methodes {
                 "        <p class=\"one_third\">0476/79.83.46</p>\n" +
                 "    </div></body>\n" +
                 "</html>\n";
-    }
-
-    public static void printText(Context context, WebView webView, String title){
-        if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            PrintManager printer = (PrintManager) context.getSystemService(PRINT_SERVICE);
-
-            PrintDocumentAdapter adapter = webView.createPrintDocumentAdapter(title);
-
-            PrintAttributes.Builder attr = new PrintAttributes.Builder();
-            attr.setMediaSize(PrintAttributes.MediaSize.ISO_A4);
-
-            printer.getPrintJobs().add(printer.print(title, adapter, attr.build()));
-        }else{
-            Toast.makeText(context, "Error", Toast.LENGTH_SHORT).show();
-        }
     }
 }

@@ -11,6 +11,7 @@ import android.widget.TextView;
 import com.example.vermolenit.DB.DbVermolenIt;
 import com.example.vermolenit.DB.KasticketArtikelDAO;
 import com.example.vermolenit.DB.KasticketDAO;
+import com.example.vermolenit.HomeActivity;
 import com.example.vermolenit.Model.Kasticket;
 import com.example.vermolenit.Model.KasticketArtikel;
 import com.example.vermolenit.R;
@@ -32,11 +33,23 @@ public class KasticketGridAdapter extends BaseAdapter {
 
         dao = DbVermolenIt.getDatabase(mContext).kasticketDAO();
         kasticketArtikelDAO = DbVermolenIt.getDatabase(mContext).kasticketArtikelDAO();
+
         kastickets = DAC.Kastickets;
         kastickets.sort(new Comparator<Kasticket>() {
             @Override
             public int compare(Kasticket o1, Kasticket o2) {
-                return o1.getDatum().compareTo(o2.getDatum());
+                return o2.getDatum().compareTo(o1.getDatum());
+            }
+        });
+    }
+
+    public void update(){
+        notifyDataSetChanged();
+
+        kastickets.sort(new Comparator<Kasticket>() {
+            @Override
+            public int compare(Kasticket o1, Kasticket o2) {
+                return o2.getDatum().compareTo(o1.getDatum());
             }
         });
     }
@@ -105,6 +118,7 @@ public class KasticketGridAdapter extends BaseAdapter {
                             });
                             DAC.Kastickets.remove(kasticket);
                             notifyDataSetChanged();
+                            ((HomeActivity)mContext).checkOmzet();
                             dialogYesNo.cancel();
                         }
                     });

@@ -20,9 +20,4 @@
         android:title="Klanten"
         app:showAsAction="never"></item>
 
-    <item
-        android:id="@+id/action_kastickets"
-        android:title="Kastickets"
-        app:showAsAction="never"></item>
-
 </menu>
