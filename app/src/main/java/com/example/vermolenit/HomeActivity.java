@@ -113,7 +113,31 @@ public class HomeActivity extends AppCompatActivity {
             public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
                 final Kasticket kasticket = (Kasticket) grdKasticket.getAdapter().getItem(position);
 
-                //TODO: Doorgaan naar print
+                String status = "";
+
+                if (kasticket.isBetaald() == true) {
+                    status = "onbetaald";
+                } else if (kasticket.isBetaald() == false) {
+                    status = "betaald";
+                }
+
+                final DialogYesNo dialogYesNo = new DialogYesNo(HomeActivity.this, "Betaald Wijzigen", "Kasticket is " + status);
+                dialogYesNo.btnNo.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        dialogYesNo.cancel();
+                    }
+                });
+                dialogYesNo.btnYes.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        kasticket.setBetaald(!kasticket.isBetaald());
+                        DbVermolenIt.getDatabase(HomeActivity.this).kasticketDAO().update(kasticket);
+                        ((KasticketGridAdapter)grdKasticket.getAdapter()).update();
+                        dialogYesNo.cancel();
+                    }
+                });
+                dialogYesNo.show();
                 return true;
             }
         });
