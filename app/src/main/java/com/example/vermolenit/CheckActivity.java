@@ -192,6 +192,8 @@ public class CheckActivity extends AppCompatActivity {
                         Artikel artikel = DAC.Artikels.get(position);
                         kasticketArtikel.setArtikel(artikel);
                         kasticketArtikel.setArtikel_id(artikel.getId());
+                        kasticketArtikel.setKasticket_id(kasticket.getId());
+                        kasticketArtikel.setKasticket(kasticket);
 
                         if (kasticketArtikels.contains(kasticketArtikel)){
                             for (KasticketArtikel ka : kasticketArtikels){

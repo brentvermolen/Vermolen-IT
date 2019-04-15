@@ -331,13 +331,13 @@ public class Methodes {
         double subtotaal = 0f;
         for (KasticketArtikel kasticketArtikel : kasticket.getKasticketArtikels()){
             double prijsExcl = kasticketArtikel.getHuidige_prijs() / 1.21;
-            subtotaal += prijsExcl;
+            subtotaal += prijsExcl * kasticketArtikel.getAantal();
 
             middle += "                <tr>\n" +
                     "                    <td style=\"width: 55%\">" + kasticketArtikel.getArtikel().getOmschrijving() + "</td>\n" +
                     "                    <td style=\"width: 15%\">" + kasticketArtikel.getAantal() + kasticketArtikel.getArtikel().getEenheid().getVerkort() + "</td>\n" +
                     "                    <td style=\"width: 15%\">" + String.format("€ %.2f", prijsExcl) + "</td>\n" +
-                    "                    <td style=\"width: 15%\">" + String.format("€ %.2f", prijsExcl * 2) + "</td>\n" +
+                    "                    <td style=\"width: 15%\">" + String.format("€ %.2f", prijsExcl * kasticketArtikel.getAantal()) + "</td>\n" +
                     "                </tr>";
         }
         double btw = subtotaal * 0.21;

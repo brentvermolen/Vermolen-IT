@@ -134,6 +134,7 @@ public class HomeActivity extends AppCompatActivity {
                         kasticket.setBetaald(!kasticket.isBetaald());
                         DbVermolenIt.getDatabase(HomeActivity.this).kasticketDAO().update(kasticket);
                         ((KasticketGridAdapter)grdKasticket.getAdapter()).update();
+                        checkOmzet();
                         dialogYesNo.cancel();
                     }
                 });
