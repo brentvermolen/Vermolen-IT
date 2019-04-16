@@ -9,7 +9,6 @@
         android:roundIcon="@mipmap/ic_logo"
         android:supportsRtl="true"
         android:theme="@style/AppTheme.NoBar">
-        <activity android:name=".PrintActivity"></activity>
         <activity android:name=".CheckActivity" />
         <activity android:name=".CustomerActivity" />
         <activity android:name=".InventoryActivity" />

@@ -154,6 +154,10 @@ public class Methodes {
                 "            padding-left: 15px;\n" +
                 "        }\n" +
                 "\n" +
+                "        .artikels tr:nth-child(even) {\n" +
+                "            background-color: azure;\n" +
+                "        }\n" +
+                "\n" +
                 "        .artikels td {\n" +
                 "            padding-left: 15px;\n" +
                 "            border: solid 1px black;\n" +
@@ -179,7 +183,7 @@ public class Methodes {
                 "        }\n" +
                 "    </style>\n" +
                 "</head>\n" +
-                "<body style=\"padding:30px\">\n" +
+                "<body>\n" +
                 "    <div class=\"header\">\n" +
                 "        <div class=\"bedrijf_info two_third first\">\n" +
                 "            <h1>Vermolen-IT</h1>\n" +
@@ -303,7 +307,7 @@ public class Methodes {
     }
 
     public static String getMiddleHtml(Kasticket kasticket){
-        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd/MM/yyyy");
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd MMMM yyyy");
 
         String middle = "<div class=\"middle\">\n" +
                 "        <div class=\"factuur_aan one_half first\">\n" +
@@ -316,7 +320,7 @@ public class Methodes {
                 "            <h3 class=\"one_half first title\">Datum</h3>\n" +
                 "            <p class=\"one_half title\">" + simpleDateFormat.format(kasticket.getDatum()) + "</p>\n" +
                 "            <h3 class=\"one_half first title\">Nummer</h3>\n" +
-                "            <p class=\"one_half title\">" + String.format("%06d", kasticket.getId()) + "</p>\n" +
+                "            <p class=\"one_half title\">K" + String.format("%06d", kasticket.getId()) + "</p>\n" +
                 "        </div>\n" +
                 "\n" +
                 "        <div class=\"artikels first\">\n" +
@@ -324,33 +328,33 @@ public class Methodes {
                 "                <tr>\n" +
                 "                    <th style=\"width: 55%\">Omschrijving</th>\n" +
                 "                    <th style=\"width: 15%\">Aantal</th>\n" +
-                "                    <th style=\"width: 15%\">Prijs / #</th>\n" +
-                "                    <th style=\"width: 15%\">Totaal</th>\n" +
+                "                    <th style=\"width: 15%\">Prijs</th>\n" +
+                "                    <th style=\"width: 15%\">Subtotaal</th>\n" +
                 "                </tr>\n";
 
-        double subtotaal = 0f;
+        double totaal = 0f;
         for (KasticketArtikel kasticketArtikel : kasticket.getKasticketArtikels()){
-            double prijsExcl = kasticketArtikel.getHuidige_prijs() / 1.21;
-            subtotaal += prijsExcl * kasticketArtikel.getAantal();
+            double prijs = kasticketArtikel.getHuidige_prijs();
+            totaal += prijs * kasticketArtikel.getAantal();
 
             middle += "                <tr>\n" +
                     "                    <td style=\"width: 55%\">" + kasticketArtikel.getArtikel().getOmschrijving() + "</td>\n" +
                     "                    <td style=\"width: 15%\">" + kasticketArtikel.getAantal() + kasticketArtikel.getArtikel().getEenheid().getVerkort() + "</td>\n" +
-                    "                    <td style=\"width: 15%\">" + String.format("€ %.2f", prijsExcl) + "</td>\n" +
-                    "                    <td style=\"width: 15%\">" + String.format("€ %.2f", prijsExcl * kasticketArtikel.getAantal()) + "</td>\n" +
+                    "                    <td style=\"width: 15%\">" + String.format("€ %.2f", prijs) + "</td>\n" +
+                    "                    <td style=\"width: 15%\">" + String.format("€ %.2f", prijs * kasticketArtikel.getAantal()) + "</td>\n" +
                     "                </tr>";
         }
-        double btw = subtotaal * 0.21;
+        double subtotaal = totaal / 1.21;
 
         middle += "         </table>\n" +
                 "        </div>\n" +
                 "        <div class=\"prijzen\">\n" +
-                "            <h3 class=\"three_fourth first title\">Subtotaal:</h3>\n" +
+                "            <h3 class=\"three_fourth first title\">Totaal excl. BTW:</h3>\n" +
                 "            <p class=\"one_fourth title\">" + String.format("€ %.2f", subtotaal) + "</p>\n" +
                 "            <h3 class=\"three_fourth first title\">Btw (21%):</h3>\n" +
-                "            <p class=\"one_fourth title\">" + String.format("€ %.2f", btw) + "</p>\n" +
+                "            <p class=\"one_fourth title\">" + String.format("€ %.2f", totaal - subtotaal) + "</p>\n" +
                 "            <h2 class=\"three_fourth first title\">Totaal:</h2>\n" +
-                "            <h2 class=\"one_fourth title\">" + String.format("€ %.2f", subtotaal + btw) + "</h2>\n" +
+                "            <h2 class=\"one_fourth title\">" + String.format("€ %.2f", totaal) + "</h2>\n" +
                 "        </div>\n" +
                 "    </div>";
 
@@ -375,6 +379,7 @@ public class Methodes {
 
             PrintAttributes.Builder attr = new PrintAttributes.Builder();
             attr.setMediaSize(PrintAttributes.MediaSize.ISO_A4);
+            attr.setColorMode(PrintAttributes.COLOR_MODE_COLOR);
 
             printer.getPrintJobs().add(printer.print(title, adapter, attr.build()));
         }else{

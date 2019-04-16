@@ -13,6 +13,7 @@ import android.widget.GridView;
 import com.example.vermolenit.Class.ArtikelGridAdapter;
 import com.example.vermolenit.Class.DAC;
 import com.example.vermolenit.Class.DialogArtikelToevoegen;
+import com.example.vermolenit.Class.DialogEditInteger;
 import com.example.vermolenit.DB.ArtikelDAO;
 import com.example.vermolenit.DB.DbVermolenIt;
 import com.example.vermolenit.Model.Artikel;
@@ -75,6 +76,33 @@ public class InventoryActivity extends AppCompatActivity {
                 dialogArtikelToevoegen.show();
 
                 return true;
+            }
+        });
+
+        grdArtikels.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                final Artikel artikel = (Artikel) grdArtikels.getAdapter().getItem(position);
+
+                if (artikel.getVoorraad() != -1){
+                    final DialogEditInteger dialogEditInteger = new DialogEditInteger(InventoryActivity.this, "Voorraad Toevoegen", 1, 15, 1);
+                    dialogEditInteger.btnAnnuleren.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            dialogEditInteger.cancel();
+                        }
+                    });
+                    dialogEditInteger.btnOke.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            artikel.setVoorraad(artikel.getVoorraad() + dialogEditInteger.getValue());
+                            dao.updateVoorraad(artikel.getId(), artikel.getVoorraad());
+                            dialogEditInteger.cancel();
+                            ((ArtikelGridAdapter)grdArtikels.getAdapter()).update();
+                        }
+                    });
+                    dialogEditInteger.show();
+                }
             }
         });
     }
