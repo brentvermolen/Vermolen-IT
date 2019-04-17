@@ -224,6 +224,11 @@ public class CheckActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
 
+        if (id == 16908332){
+            onBackPressed();
+            return true;
+        }
+
         if (kasticket.getKlant_id() == -1){
             Toast.makeText(this, "Je moet een klant selecteren", Toast.LENGTH_SHORT).show();
             return false;
@@ -279,9 +284,6 @@ public class CheckActivity extends AppCompatActivity {
                 Toast.makeText(this, "Concept opgeslagen", Toast.LENGTH_SHORT).show();
 
                 finish();
-                break;
-            case 16908332:
-                onBackPressed();
                 break;
             default:
                 super.onOptionsItemSelected(item);
