@@ -8,6 +8,9 @@ import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.webkit.WebResourceRequest;
+import android.webkit.WebView;
+import android.webkit.WebViewClient;
 import android.widget.AdapterView;
 import android.widget.BaseAdapter;
 import android.widget.GridView;
@@ -21,6 +24,7 @@ import com.example.vermolenit.Class.DAC;
 import com.example.vermolenit.Class.DialogKlantToevoegen;
 import com.example.vermolenit.Class.DialogYesNo;
 import com.example.vermolenit.Class.KasticketGridAdapter;
+import com.example.vermolenit.Class.Methodes;
 import com.example.vermolenit.Class.Singletons;
 import com.example.vermolenit.DB.DbVermolenIt;
 import com.example.vermolenit.DB.KlantDAO;
@@ -101,6 +105,34 @@ public class HomeActivity extends AppCompatActivity {
                             Intent intent = new Intent(HomeActivity.this, CheckActivity.class);
                             intent.putExtra("kasticket_id", kasticket.getId());
                             startActivity(intent);
+                            dialogYesNo.cancel();
+                        }
+                    });
+                    dialogYesNo.show();
+                }else{
+                    final DialogYesNo dialogYesNo = new DialogYesNo(HomeActivity.this, "Kasticket Afdrukken", "Wilt u het kasticket afdrukken?");
+                    dialogYesNo.btnNo.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            dialogYesNo.cancel();
+                        }
+                    });
+                    dialogYesNo.btnYes.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            WebView webView = new WebView(HomeActivity.this);
+                            webView.setWebViewClient(new WebViewClient(){
+                                @Override
+                                public boolean shouldOverrideUrlLoading(WebView view, WebResourceRequest request) {
+                                    return false;
+                                }
+                            });
+
+                            String htmlChanges = Methodes.getIntroHtml() + Methodes.getMiddleHtml(kasticket) + Methodes.getEndHtml();
+
+                            webView.loadDataWithBaseURL(null, htmlChanges, "text/HTML", "UTF-8", null);
+                            Methodes.printText(HomeActivity.this, webView, "Kasticket " + String.format("%06d", kasticket.getId()));
+
                             dialogYesNo.cancel();
                         }
                     });

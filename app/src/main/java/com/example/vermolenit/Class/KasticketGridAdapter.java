@@ -144,7 +144,7 @@ public class KasticketGridAdapter extends BaseAdapter {
         double prijs = 0f;
 
         for (KasticketArtikel ka : kasticket.getKasticketArtikels()){
-            prijs += ka.getAantal() * ka.getArtikel().getPrijs();
+            prijs += ka.getAantal() * ka.getHuidige_prijs();
         }
         viewHolder.lblPrijs.setText(String.format("€ %.2f", prijs));
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd/MM/yyyy");

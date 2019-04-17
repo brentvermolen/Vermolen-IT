@@ -18,7 +18,7 @@ import com.example.vermolenit.Model.Klant;
 import java.util.Calendar;
 import java.util.concurrent.Executors;
 
-@Database(entities =  {Klant.class, Artikel.class, Kasticket.class, KasticketArtikel.class}, version = 1)
+@Database(entities =  {Klant.class, Artikel.class, Kasticket.class, KasticketArtikel.class}, version = 2)
 public abstract class DbVermolenIt extends RoomDatabase {
     private static DbVermolenIt INSTANCE;
     private static final String DB_NAME = "Vermolen_IT.db";
