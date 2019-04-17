@@ -34,8 +34,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:gravity="center"
-                android:orientation="horizontal"
-                android:weightSum="5">
+                android:orientation="horizontal">
 
                 <RadioGroup
                     android:id="@+id/rdgAanspreking"
@@ -52,11 +51,6 @@
                         android:buttonTint="@android:color/black"
                         android:text="Mnr."/>
 
-                    <View
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1" />
-
                     <RadioButton
                         android:id="@+id/rdb2"
                         android:layout_width="match_parent"
@@ -65,11 +59,6 @@
                         android:tag="2"
                         android:buttonTint="@android:color/black"
                         android:text="Mvr."/>
-
-                    <View
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1" />
 
                     <RadioButton
                         android:id="@+id/rdb3"
@@ -151,7 +140,7 @@
                 android:id="@+id/txtTelNr"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:inputType="textCapWords"
+                android:inputType="phone"
                 android:textSize="20dp"
                 android:hint="Telefoon Nr."
                 android:imeOptions="actionDone"/>
