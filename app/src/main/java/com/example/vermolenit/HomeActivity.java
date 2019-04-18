@@ -22,6 +22,7 @@ import android.widget.Toast;
 
 import com.example.vermolenit.Class.DAC;
 import com.example.vermolenit.Class.DialogKlantToevoegen;
+import com.example.vermolenit.Class.DialogSelectKasticket;
 import com.example.vermolenit.Class.DialogYesNo;
 import com.example.vermolenit.Class.KasticketGridAdapter;
 import com.example.vermolenit.Class.Methodes;
@@ -120,18 +121,7 @@ public class HomeActivity extends AppCompatActivity {
                     dialogYesNo.btnYes.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
-                            WebView webView = new WebView(HomeActivity.this);
-                            webView.setWebViewClient(new WebViewClient(){
-                                @Override
-                                public boolean shouldOverrideUrlLoading(WebView view, WebResourceRequest request) {
-                                    return false;
-                                }
-                            });
-
-                            String htmlChanges = Methodes.getIntroHtml() + Methodes.getMiddleHtml(kasticket) + Methodes.getEndHtml();
-
-                            webView.loadDataWithBaseURL(null, htmlChanges, "text/HTML", "UTF-8", null);
-                            Methodes.printText(HomeActivity.this, webView, "Kasticket " + String.format("%06d", kasticket.getId()));
+                            printKasticket(kasticket);
 
                             dialogYesNo.cancel();
                         }
@@ -174,6 +164,21 @@ public class HomeActivity extends AppCompatActivity {
                 return true;
             }
         });
+    }
+
+    private void printKasticket(Kasticket kasticket) {
+        WebView webView = new WebView(HomeActivity.this);
+        webView.setWebViewClient(new WebViewClient(){
+            @Override
+            public boolean shouldOverrideUrlLoading(WebView view, WebResourceRequest request) {
+                return false;
+            }
+        });
+
+        String htmlChanges = Methodes.getIntroHtml() + Methodes.getMiddleHtml(kasticket) + Methodes.getEndHtml();
+
+        webView.loadDataWithBaseURL(null, htmlChanges, "text/HTML", "UTF-8", null);
+        Methodes.printText(HomeActivity.this, webView, "Kasticket " + String.format("%06d", kasticket.getId()));
     }
 
     public void checkVoorraad() {
@@ -249,6 +254,19 @@ public class HomeActivity extends AppCompatActivity {
             case R.id.action_add:
                 Intent intent2 = new Intent(HomeActivity.this, CheckActivity.class);
                 startActivity(intent2);
+                break;
+            case R.id.action_search:
+                final DialogSelectKasticket dialogSelectKasticket = new DialogSelectKasticket(this, "Selecteer Kasticket", DAC.Kastickets);
+                dialogSelectKasticket.grdItems.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                    @Override
+                    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                        Kasticket kasticket = (Kasticket) dialogSelectKasticket.grdItems.getAdapter().getItem(position);
+
+                        printKasticket(kasticket);
+                        dialogSelectKasticket.cancel();
+                    }
+                });
+                dialogSelectKasticket.show();
                 break;
             case 16908332:
                 finish();

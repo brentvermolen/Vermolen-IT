@@ -181,6 +181,11 @@ public class Methodes {
                 "            border-top: 1px solid black;\n" +
                 "            text-align: center;\n" +
                 "        }\n" +
+                "\n" +
+                "        .header {\n" +
+                "            padding-bottom: 8px;\n" +
+                "            border-bottom: 1px solid black;\n" +
+                "        }" +
                 "    </style>\n" +
                 "</head>\n" +
                 "<body>\n" +
@@ -300,7 +305,6 @@ public class Methodes {
                 "NwicbGi7RU6mtU06pMZxv4AgXBzZMBQrPsMxaZ0dFx8RiMwOdmvQby2EBYaFoNjLqe+Ubxj/GES6GE4e+" +
                 "iGQBC0YwhHhlQnAEgVJxQdIcMiGYACEUzhnhkQHEG/h+ia087sht5bQAAAABJRU5ErkJggg==\" width=\"150px\" height=\"150px\" />\n" +
                 "        </div>\n" +
-                "        <hr />\n" +
                 "    </div>";
 
         return html;

@@ -88,4 +88,9 @@ public class Kasticket {
 
         return artikels;
     }
+
+    @Override
+    public String toString() {
+        return String.format("K%06d", getId());
+    }
 }
