@@ -234,10 +234,39 @@ public class CheckActivity extends AppCompatActivity {
         }
 
         kasticket.setBetaald(false);
-        kasticket.setId((int) RemoteKasticketsDAO.insert(kasticket));
+
+
+        if (!DAC.Kastickets.contains(kasticket)){
+            new AsyncTask<Void, Void, Void>(){
+                @Override
+                protected Void doInBackground(Void... voids) {
+                    kasticket.setId((int) RemoteKasticketsDAO.insert(kasticket));
+                    return null;
+                }
+            }.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
+            DAC.Kastickets.add(kasticket);
+        }else{
+            new AsyncTask<Void, Void, Void>(){
+                @Override
+                protected Void doInBackground(Void... voids) {
+                    RemoteKasticketsDAO.update(kasticket);
+                    return null;
+                }
+            }.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
+        }
+
+        new AsyncTask<Void, Void, Void>(){
+            @Override
+            protected Void doInBackground(Void... voids) {
+                RemoteKasticketArtikelDAO.deleteByKasticket(kasticket.getId());
+                return null;
+            }
+        }.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
+
         for (final KasticketArtikel ka : kasticket.getKasticketArtikels()){
             ka.setHuidige_prijs(ka.getArtikel().getPrijs());
             ka.setKasticket_id(kasticket.getId());
+            DAC.KasticketArtikels.add(ka);
             new AsyncTask<Void, Void, Void>(){
                 @Override
                 protected Void doInBackground(Void... voids) {
@@ -245,34 +274,28 @@ public class CheckActivity extends AppCompatActivity {
                     return null;
                 }
             }.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
-            if (!DAC.KasticketArtikels.contains(ka)){
-                DAC.KasticketArtikels.add(ka);
 
-                if (ka.getArtikel().getVoorraad() > 0){
-                    if (ka.getArtikel().getVoorraad() - ka.getAantal() >= 0){
-                        ka.getArtikel().setVoorraad(ka.getArtikel().getVoorraad() - ka.getAantal());
-                        new AsyncTask<Void, Void, Void>(){
-                            @Override
-                            protected Void doInBackground(Void... voids) {
-                                RemoteArtikelDAO.update(ka.getArtikel());
-                                return null;
-                            }
-                        }.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
-                    }else{
-                        ka.getArtikel().setVoorraad(0);
-                        new AsyncTask<Void, Void, Void>(){
-                            @Override
-                            protected Void doInBackground(Void... voids) {
-                                RemoteArtikelDAO.update(ka.getArtikel());
-                                return null;
-                            }
-                        }.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
-                    }
+            if (ka.getArtikel().getVoorraad() > 0){
+                if (ka.getArtikel().getVoorraad() - ka.getAantal() >= 0){
+                    ka.getArtikel().setVoorraad(ka.getArtikel().getVoorraad() - ka.getAantal());
+                    new AsyncTask<Void, Void, Void>(){
+                        @Override
+                        protected Void doInBackground(Void... voids) {
+                            RemoteArtikelDAO.update(ka.getArtikel());
+                            return null;
+                        }
+                    }.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
+                }else{
+                    ka.getArtikel().setVoorraad(0);
+                    new AsyncTask<Void, Void, Void>(){
+                        @Override
+                        protected Void doInBackground(Void... voids) {
+                            RemoteArtikelDAO.update(ka.getArtikel());
+                            return null;
+                        }
+                    }.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
                 }
             }
-        }
-        if (!DAC.Kastickets.contains(kasticket)){
-            DAC.Kastickets.add(kasticket);
         }
 
         switch (id){
