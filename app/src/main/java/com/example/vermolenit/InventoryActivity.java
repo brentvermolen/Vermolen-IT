@@ -1,5 +1,6 @@
 package com.example.vermolenit;
 
+import android.os.AsyncTask;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
@@ -14,15 +15,13 @@ import com.example.vermolenit.Class.ArtikelGridAdapter;
 import com.example.vermolenit.Class.DAC;
 import com.example.vermolenit.Class.DialogArtikelToevoegen;
 import com.example.vermolenit.Class.DialogEditInteger;
-import com.example.vermolenit.DB.ArtikelDAO;
-import com.example.vermolenit.DB.DbVermolenIt;
+import com.example.vermolenit.DB.RemoteArtikelDAO;
 import com.example.vermolenit.Model.Artikel;
 
 public class InventoryActivity extends AppCompatActivity {
 
     Toolbar mToolbar;
     GridView grdArtikels;
-    private ArtikelDAO dao;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -41,8 +40,6 @@ public class InventoryActivity extends AppCompatActivity {
     }
 
     private void initViews() {
-        dao = DbVermolenIt.getDatabase(this).artikelDAO();
-
         grdArtikels = findViewById(R.id.grdArtikels);
         grdArtikels.setAdapter(new ArtikelGridAdapter(this));
     }
@@ -68,7 +65,13 @@ public class InventoryActivity extends AppCompatActivity {
                         artikel.setVoorraad(dialogArtikelToevoegen.getVoorraad());
                         artikel.setMeldingOpVoorraad(dialogArtikelToevoegen.getMeldingOp());
                         artikel.setEenheid(dialogArtikelToevoegen.getEenheid());
-                        dao.update(artikel);
+                        new AsyncTask<Void, Void, Void>(){
+                            @Override
+                            protected Void doInBackground(Void... voids) {
+                                RemoteArtikelDAO.update(artikel);
+                                return null;
+                            }
+                        }.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
                         ((ArtikelGridAdapter)grdArtikels.getAdapter()).update();
                         dialogArtikelToevoegen.cancel();
                     }
@@ -96,7 +99,13 @@ public class InventoryActivity extends AppCompatActivity {
                         @Override
                         public void onClick(View v) {
                             artikel.setVoorraad(artikel.getVoorraad() + dialogEditInteger.getValue());
-                            dao.updateVoorraad(artikel.getId(), artikel.getVoorraad());
+                            new AsyncTask<Void, Void, Void>(){
+                                @Override
+                                protected Void doInBackground(Void... voids) {
+                                    RemoteArtikelDAO.update(artikel);
+                                    return null;
+                                }
+                            }.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
                             dialogEditInteger.cancel();
                             ((ArtikelGridAdapter)grdArtikels.getAdapter()).update();
                         }
@@ -129,13 +138,19 @@ public class InventoryActivity extends AppCompatActivity {
                 dialogArtikelToevoegen.btnToevoegen.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        Artikel artikel = new Artikel();
+                        final Artikel artikel = new Artikel();
                         artikel.setOmschrijving(dialogArtikelToevoegen.getOmschrijing());
                         artikel.setPrijs(dialogArtikelToevoegen.getPrijs());
                         artikel.setVoorraad(dialogArtikelToevoegen.getVoorraad());
                         artikel.setMeldingOpVoorraad(dialogArtikelToevoegen.getMeldingOp());
                         artikel.setEenheid(dialogArtikelToevoegen.getEenheid());
-                        artikel.setId((int)dao.insert(artikel));
+                        new AsyncTask<Void, Void, Void>(){
+                            @Override
+                            protected Void doInBackground(Void... voids) {
+                                artikel.setId((int)RemoteArtikelDAO.insert(artikel));
+                                return null;
+                            }
+                        }.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
                         DAC.Artikels.add(artikel);
                         ((ArtikelGridAdapter) grdArtikels.getAdapter()).update();
                         dialogArtikelToevoegen.cancel();

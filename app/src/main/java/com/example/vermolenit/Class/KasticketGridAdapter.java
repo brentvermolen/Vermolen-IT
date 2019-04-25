@@ -1,6 +1,7 @@
 package com.example.vermolenit.Class;
 
 import android.content.Context;
+import android.os.AsyncTask;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -8,9 +9,8 @@ import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.example.vermolenit.DB.DbVermolenIt;
-import com.example.vermolenit.DB.KasticketArtikelDAO;
-import com.example.vermolenit.DB.KasticketDAO;
+import com.example.vermolenit.DB.RemoteKasticketArtikelDAO;
+import com.example.vermolenit.DB.RemoteKasticketsDAO;
 import com.example.vermolenit.HomeActivity;
 import com.example.vermolenit.Model.Kasticket;
 import com.example.vermolenit.Model.KasticketArtikel;
@@ -25,14 +25,8 @@ public class KasticketGridAdapter extends BaseAdapter {
     private Context mContext;
     private List<Kasticket> kastickets;
 
-    private KasticketDAO dao;
-    private KasticketArtikelDAO kasticketArtikelDAO;
-
     public KasticketGridAdapter(Context context){
         this.mContext = context;
-
-        dao = DbVermolenIt.getDatabase(mContext).kasticketDAO();
-        kasticketArtikelDAO = DbVermolenIt.getDatabase(mContext).kasticketArtikelDAO();
 
         kastickets = DAC.Kastickets;
         kastickets.sort(new Comparator<Kasticket>() {
@@ -104,8 +98,21 @@ public class KasticketGridAdapter extends BaseAdapter {
                         @Override
                         public void onClick(View v) {
                             kastickets.remove(kasticket);
-                            kasticketArtikelDAO.deleteByKasticket(kasticket.getId());
-                            dao.delete(kasticket.getId());
+
+                            new AsyncTask<Void, Void, Void>(){
+                                @Override
+                                protected Void doInBackground(Void... voids) {
+                                    RemoteKasticketArtikelDAO.deleteByKasticket(kasticket.getId());
+                                    return null;
+                                }
+                            }.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
+                            new AsyncTask<Void, Void, Void>(){
+                                @Override
+                                protected Void doInBackground(Void... voids) {
+                                    RemoteKasticketsDAO.delete(kasticket.getId());
+                                    return null;
+                                }
+                            }.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
                             DAC.KasticketArtikels.removeIf(new Predicate<KasticketArtikel>() {
                                 @Override
                                 public boolean test(KasticketArtikel kasticketArtikel) {

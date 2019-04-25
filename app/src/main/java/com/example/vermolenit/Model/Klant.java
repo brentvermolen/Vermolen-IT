@@ -9,7 +9,6 @@ import android.content.Context;
 
 import com.example.vermolenit.Class.AansprekingConverter;
 import com.example.vermolenit.Class.Singletons;
-import com.example.vermolenit.DB.DbVermolenIt;
 
 import java.util.ArrayList;
 import java.util.List;

@@ -64,6 +64,17 @@ public class Methodes {
         return null;
     }
 
+    public static List<Artikel> getWhereVoorraadIsLow(List<Artikel> artikels){
+        List<Artikel> data = new ArrayList<>();
+
+        for (Artikel a : artikels){
+            if (a.getVoorraad() <= a.getMeldingOpVoorraad() && a.getVoorraad() != -1 && a.getMeldingOpVoorraad() != -1){
+                data.add(a);
+            }
+        }
+
+        return data;
+    }
 
 
     public static String getIntroHtml(){

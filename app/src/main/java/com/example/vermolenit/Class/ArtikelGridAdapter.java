@@ -1,6 +1,7 @@
 package com.example.vermolenit.Class;
 
 import android.content.Context;
+import android.os.AsyncTask;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -8,8 +9,7 @@ import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.example.vermolenit.DB.ArtikelDAO;
-import com.example.vermolenit.DB.DbVermolenIt;
+import com.example.vermolenit.DB.RemoteArtikelDAO;
 import com.example.vermolenit.Model.Artikel;
 import com.example.vermolenit.R;
 
@@ -20,12 +20,9 @@ public class ArtikelGridAdapter extends BaseAdapter {
     private Context mContext;
     private List<Artikel> artikels;
 
-    private ArtikelDAO dao;
-
     public ArtikelGridAdapter(Context context){
         this.mContext = context;
 
-        dao = DbVermolenIt.getDatabase(mContext).artikelDAO();
         artikels = DAC.Artikels;
         artikels.sort(new Comparator<Artikel>() {
             @Override
@@ -96,7 +93,13 @@ public class ArtikelGridAdapter extends BaseAdapter {
                         @Override
                         public void onClick(View v) {
                             artikels.remove(artikel);
-                            dao.delete(artikel.getId());
+                            new AsyncTask<Void, Void, Void>(){
+                                @Override
+                                protected Void doInBackground(Void... voids) {
+                                    RemoteArtikelDAO.delete(artikel.getId());
+                                    return null;
+                                }
+                            }.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
                             DAC.Artikels.remove(artikel);
                             notifyDataSetChanged();
                             dialogYesNo.cancel();

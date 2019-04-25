@@ -1,6 +1,7 @@
 package com.example.vermolenit;
 
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
@@ -27,8 +28,7 @@ import com.example.vermolenit.Class.DialogYesNo;
 import com.example.vermolenit.Class.KasticketGridAdapter;
 import com.example.vermolenit.Class.Methodes;
 import com.example.vermolenit.Class.Singletons;
-import com.example.vermolenit.DB.DbVermolenIt;
-import com.example.vermolenit.DB.KlantDAO;
+import com.example.vermolenit.DB.RemoteKasticketsDAO;
 import com.example.vermolenit.Model.Artikel;
 import com.example.vermolenit.Model.Kasticket;
 import com.example.vermolenit.Model.KasticketArtikel;
@@ -48,8 +48,6 @@ public class HomeActivity extends AppCompatActivity {
     private ProgressBar prgOmzet;
 
     GridView grdKasticket;
-
-    KlantDAO klantDAO;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -73,8 +71,6 @@ public class HomeActivity extends AppCompatActivity {
     }
 
     private void initViews() {
-        klantDAO = DbVermolenIt.getDatabase(this).klantDAO();
-
         llVoorraad = findViewById(R.id.llVoorraad);
         horizontalScrollView = findViewById(R.id.horizontal_scrollview);
 
@@ -154,7 +150,13 @@ public class HomeActivity extends AppCompatActivity {
                     @Override
                     public void onClick(View v) {
                         kasticket.setBetaald(!kasticket.isBetaald());
-                        DbVermolenIt.getDatabase(HomeActivity.this).kasticketDAO().update(kasticket);
+                        new AsyncTask<Void, Void, Void>(){
+                            @Override
+                            protected Void doInBackground(Void... voids) {
+                                RemoteKasticketsDAO.update(kasticket);
+                                return null;
+                            }
+                        }.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
                         ((KasticketGridAdapter)grdKasticket.getAdapter()).update();
                         checkOmzet();
                         dialogYesNo.cancel();
@@ -182,7 +184,7 @@ public class HomeActivity extends AppCompatActivity {
     }
 
     public void checkVoorraad() {
-        List<Artikel> voorraadTekort = DbVermolenIt.getDatabase(this).artikelDAO().getWhereVoorraadIsLow();
+        List<Artikel> voorraadTekort = Methodes.getWhereVoorraadIsLow(DAC.Artikels);
         llVoorraad.removeAllViews();
 
         if (voorraadTekort.size() > 0){

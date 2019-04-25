@@ -1,6 +1,7 @@
 package com.example.vermolenit;
 
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -19,8 +20,7 @@ import com.example.vermolenit.Class.DialogArtikelToevoegen;
 import com.example.vermolenit.Class.DialogKlantToevoegen;
 import com.example.vermolenit.Class.DialogYesNo;
 import com.example.vermolenit.Class.KlantGridAdapter;
-import com.example.vermolenit.DB.DbVermolenIt;
-import com.example.vermolenit.DB.KlantDAO;
+import com.example.vermolenit.DB.RemoteKlantDAO;
 import com.example.vermolenit.Model.Artikel;
 import com.example.vermolenit.Model.Klant;
 
@@ -28,7 +28,6 @@ public class CustomerActivity extends AppCompatActivity {
 
     Toolbar mToolbar;
     GridView grdKlanten;
-    private KlantDAO dao;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -47,8 +46,6 @@ public class CustomerActivity extends AppCompatActivity {
     }
 
     private void initViews() {
-        dao = DbVermolenIt.getDatabase(this).klantDAO();
-
         grdKlanten = findViewById(R.id.grdKlanten);
         grdKlanten.setAdapter(new KlantGridAdapter(this));
     }
@@ -68,8 +65,14 @@ public class CustomerActivity extends AppCompatActivity {
                 dialogKlantToevoegen.btnToevoegen.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        Klant klant = dialogKlantToevoegen.getKlant();
-                        dao.update(klant);
+                        final Klant klant = dialogKlantToevoegen.getKlant();
+                        new AsyncTask<Void, Void, Void>(){
+                            @Override
+                            protected Void doInBackground(Void... voids) {
+                                RemoteKlantDAO.update(klant);
+                                return null;
+                            }
+                        }.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
                         ((KlantGridAdapter) grdKlanten.getAdapter()).update();
                         dialogKlantToevoegen.cancel();
                     }
@@ -125,8 +128,14 @@ public class CustomerActivity extends AppCompatActivity {
                 dialogKlantToevoegen.btnToevoegen.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        Klant klant = dialogKlantToevoegen.getKlant();
-                        klant.setId((int)dao.insert(klant));
+                        final Klant klant = dialogKlantToevoegen.getKlant();
+                        new AsyncTask<Void, Void, Void>(){
+                            @Override
+                            protected Void doInBackground(Void... voids) {
+                                klant.setId((int)RemoteKlantDAO.insert(klant));
+                                return null;
+                            }
+                        }.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
                         DAC.Klanten.add(klant);
                         ((KlantGridAdapter) grdKlanten.getAdapter()).update();
                         dialogKlantToevoegen.cancel();

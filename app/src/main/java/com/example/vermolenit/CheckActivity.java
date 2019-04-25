@@ -1,6 +1,7 @@
 package com.example.vermolenit;
 
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
@@ -27,10 +28,9 @@ import com.example.vermolenit.Class.DialogSelectKlant;
 import com.example.vermolenit.Class.DialogYesNo;
 import com.example.vermolenit.Class.KasticketGridAdapter;
 import com.example.vermolenit.Class.Methodes;
-import com.example.vermolenit.DB.ArtikelDAO;
-import com.example.vermolenit.DB.DbVermolenIt;
-import com.example.vermolenit.DB.KasticketArtikelDAO;
-import com.example.vermolenit.DB.KasticketDAO;
+import com.example.vermolenit.DB.RemoteArtikelDAO;
+import com.example.vermolenit.DB.RemoteKasticketArtikelDAO;
+import com.example.vermolenit.DB.RemoteKasticketsDAO;
 import com.example.vermolenit.Model.Artikel;
 import com.example.vermolenit.Model.Kasticket;
 import com.example.vermolenit.Model.KasticketArtikel;
@@ -41,6 +41,7 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
+import java.util.concurrent.ThreadPoolExecutor;
 
 public class CheckActivity extends AppCompatActivity {
 
@@ -61,9 +62,6 @@ public class CheckActivity extends AppCompatActivity {
     public TextView lblTotaal;
     public TextView lblSubtotaal;
     public TextView lblBtw;
-    private KasticketDAO kasticketDAO;
-    private KasticketArtikelDAO kasticketArtikelDAO;
-    private ArtikelDAO artikelDAO;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -106,10 +104,6 @@ public class CheckActivity extends AppCompatActivity {
     }
 
     private void initViews() {
-        kasticketDAO = DbVermolenIt.getDatabase(this).kasticketDAO();
-        kasticketArtikelDAO = DbVermolenIt.getDatabase(this).kasticketArtikelDAO();
-        artikelDAO = DbVermolenIt.getDatabase(this).artikelDAO();
-
         kasticket = new Kasticket();
         kasticket.setKlant_id(-1);
         kasticketArtikels = new ArrayList<>();
@@ -240,21 +234,39 @@ public class CheckActivity extends AppCompatActivity {
         }
 
         kasticket.setBetaald(false);
-        kasticket.setId((int)kasticketDAO.insert(kasticket));
-        for (KasticketArtikel ka : kasticket.getKasticketArtikels()){
+        kasticket.setId((int) RemoteKasticketsDAO.insert(kasticket));
+        for (final KasticketArtikel ka : kasticket.getKasticketArtikels()){
             ka.setHuidige_prijs(ka.getArtikel().getPrijs());
             ka.setKasticket_id(kasticket.getId());
-            kasticketArtikelDAO.insert(ka);
+            new AsyncTask<Void, Void, Void>(){
+                @Override
+                protected Void doInBackground(Void... voids) {
+                    RemoteKasticketArtikelDAO.insert(ka);
+                    return null;
+                }
+            }.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
             if (!DAC.KasticketArtikels.contains(ka)){
                 DAC.KasticketArtikels.add(ka);
 
                 if (ka.getArtikel().getVoorraad() > 0){
                     if (ka.getArtikel().getVoorraad() - ka.getAantal() >= 0){
-                        artikelDAO.updateVoorraad(ka.getArtikel_id(), ka.getArtikel().getVoorraad() - ka.getAantal());
                         ka.getArtikel().setVoorraad(ka.getArtikel().getVoorraad() - ka.getAantal());
+                        new AsyncTask<Void, Void, Void>(){
+                            @Override
+                            protected Void doInBackground(Void... voids) {
+                                RemoteArtikelDAO.update(ka.getArtikel());
+                                return null;
+                            }
+                        }.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
                     }else{
-                        artikelDAO.updateVoorraad(ka.getArtikel_id(), 0);
                         ka.getArtikel().setVoorraad(0);
+                        new AsyncTask<Void, Void, Void>(){
+                            @Override
+                            protected Void doInBackground(Void... voids) {
+                                RemoteArtikelDAO.update(ka.getArtikel());
+                                return null;
+                            }
+                        }.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
                     }
                 }
             }
@@ -277,7 +289,13 @@ public class CheckActivity extends AppCompatActivity {
 
                 webView.loadDataWithBaseURL(null, htmlChanges, "text/HTML", "UTF-8", null);
                 kasticket.setBetaald(true);
-                kasticketDAO.update(kasticket);
+                new AsyncTask<Void, Void, Void>(){
+                    @Override
+                    protected Void doInBackground(Void... voids) {
+                        RemoteKasticketsDAO.update(kasticket);
+                        return null;
+                    }
+                }.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
                 Methodes.printText(CheckActivity.this, webView, "Kasticket " + String.format("%06d", kasticket.getId()));
                 break;
             case R.id.action_save:

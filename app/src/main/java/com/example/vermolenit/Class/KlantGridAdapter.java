@@ -1,6 +1,7 @@
 package com.example.vermolenit.Class;
 
 import android.content.Context;
+import android.os.AsyncTask;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -8,10 +9,7 @@ import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.example.vermolenit.DB.ArtikelDAO;
-import com.example.vermolenit.DB.DbVermolenIt;
-import com.example.vermolenit.DB.KlantDAO;
-import com.example.vermolenit.Model.Artikel;
+import com.example.vermolenit.DB.RemoteKlantDAO;
 import com.example.vermolenit.Model.Klant;
 import com.example.vermolenit.R;
 
@@ -22,12 +20,9 @@ public class KlantGridAdapter extends BaseAdapter {
     private Context mContext;
     private List<Klant> klanten;
 
-    private KlantDAO dao;
-
     public KlantGridAdapter(Context context){
         this.mContext = context;
 
-        dao = DbVermolenIt.getDatabase(mContext).klantDAO();
         klanten = DAC.Klanten;
         klanten.sort(new Comparator<Klant>() {
             @Override
@@ -105,7 +100,13 @@ public class KlantGridAdapter extends BaseAdapter {
                         @Override
                         public void onClick(View v) {
                             klanten.remove(klant);
-                            dao.delete(klant.getId());
+                            new AsyncTask<Void, Void, Void>(){
+                                @Override
+                                protected Void doInBackground(Void... voids) {
+                                    RemoteKlantDAO.delete(klant.getId());
+                                    return null;
+                                }
+                            }.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
                             DAC.Klanten.remove(klant);
                             notifyDataSetChanged();
                             dialogYesNo.cancel();
