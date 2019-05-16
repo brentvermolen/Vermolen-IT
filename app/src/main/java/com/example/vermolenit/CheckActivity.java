@@ -60,8 +60,6 @@ public class CheckActivity extends AppCompatActivity {
     private GridView grdArtikels;
 
     public TextView lblTotaal;
-    public TextView lblSubtotaal;
-    public TextView lblBtw;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -120,11 +118,7 @@ public class CheckActivity extends AppCompatActivity {
         btnZoekDatum = findViewById(R.id.btnZoekDatum);
 
         lblTotaal = findViewById(R.id.lblTotaal);
-        lblSubtotaal = findViewById(R.id.lblSubtotaal);
-        lblBtw = findViewById(R.id.lblBtw);
         lblTotaal.setText(String.format("€ %.2f", 0f));
-        lblSubtotaal.setText(String.format("€ %.2f", 0f));
-        lblBtw.setText(String.format("€ %.2f", 0f));
 
         btnArtikelToevoegen = findViewById(R.id.btnArtikelToevoegen);
         grdArtikels = findViewById(R.id.grdArtikels);

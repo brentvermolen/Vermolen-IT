@@ -195,7 +195,6 @@ public class Methodes {
                 "\n" +
                 "        .header {\n" +
                 "            padding-bottom: 8px;\n" +
-                "            border-bottom: 1px solid black;\n" +
                 "        }" +
                 "    </style>\n" +
                 "</head>\n" +
@@ -203,6 +202,7 @@ public class Methodes {
                 "    <div class=\"header\">\n" +
                 "        <div class=\"bedrijf_info two_third first\">\n" +
                 "            <h1>Vermolen-IT</h1>\n" +
+                "            <h3>BTW-Nummer</h3>" +
                 "            <h3>vermolen-it@hotmail.com</h3>\n" +
                 "            <h3>Consciencestraat 8</h3>\n" +
                 "            <h3>2330 Merksplas</h3>\n" +
@@ -324,11 +324,17 @@ public class Methodes {
     public static String getMiddleHtml(Kasticket kasticket){
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd MMMM yyyy");
 
-        String middle = "<div class=\"middle\">\n" +
+        String middle = "<hr class=\"first\" />" +
+                "<div class=\"middle\">\n" +
                 "        <div class=\"factuur_aan one_half first\">\n" +
                 "            <h3 class=\"title\">Aan</h3>\n" +
-                "            <p>" + kasticket.getKlant().toString() + "</p>\n" +
-                "            <p>" + kasticket.getKlant().getAdres() + "</p>\n" +
+                "            <p>" + kasticket.getKlant().toString() + "</p>\n";
+
+        if (!kasticket.getKlant().getBtw_nummer().equals("")){
+            middle += "            <p>" + kasticket.getKlant().getBtw_nummer() + "</p>\n";
+        }
+
+        middle += "            <p>" + kasticket.getKlant().getAdres() + "</p>\n" +
                 "            <p>" + kasticket.getKlant().getPostcode() + " " + kasticket.getKlant().getWoonplaats() + "</p>\n" +
                 "        </div>\n" +
                 "        <div class=\"factuur_info one_half\">\n" +
@@ -359,15 +365,15 @@ public class Methodes {
                     "                    <td style=\"width: 15%\">" + String.format("€ %.2f", prijs * kasticketArtikel.getAantal()) + "</td>\n" +
                     "                </tr>";
         }
-        double subtotaal = totaal / 1.21;
 
         middle += "         </table>\n" +
                 "        </div>\n" +
                 "        <div class=\"prijzen\">\n" +
                 "            <h3 class=\"three_fourth first title\">Totaal excl. BTW:</h3>\n" +
-                "            <p class=\"one_fourth title\">" + String.format("€ %.2f", subtotaal) + "</p>\n" +
-                "            <h3 class=\"three_fourth first title\">Btw (21%):</h3>\n" +
-                "            <p class=\"one_fourth title\">" + String.format("€ %.2f", totaal - subtotaal) + "</p>\n" +
+                "            <p class=\"one_fourth title\">" + String.format("€ %.2f", totaal) + "</p>\n" +
+                "            <h3 class=\"three_fourth first title\">Btw (0%):</h3>\n" +
+                "            <p class=\"one_fourth title\">€ 0,00</p>\n" +
+                "            <p class=\"first\">Vrijstellingsregeling btw voor kleine ondernemingen</p>\n" +
                 "            <h2 class=\"three_fourth first title\">Totaal:</h2>\n" +
                 "            <h2 class=\"one_fourth title\">" + String.format("€ %.2f", totaal) + "</h2>\n" +
                 "        </div>\n" +

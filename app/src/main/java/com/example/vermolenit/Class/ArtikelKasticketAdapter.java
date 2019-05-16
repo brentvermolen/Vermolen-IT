@@ -20,14 +20,10 @@ public class ArtikelKasticketAdapter extends BaseAdapter {
     private List<KasticketArtikel> artikels;
 
     private TextView lblTotaal;
-    private TextView lblSubtotaal;
-    private TextView lblBtw;
 
     public ArtikelKasticketAdapter(Context context, List<KasticketArtikel> artikels){
         this.mContext = context;
         this.lblTotaal = ((CheckActivity)context).lblTotaal;
-        this.lblSubtotaal = ((CheckActivity)context).lblSubtotaal;
-        this.lblBtw = ((CheckActivity)context).lblBtw;
 
         this.artikels = artikels;
     }
@@ -163,8 +159,5 @@ public class ArtikelKasticketAdapter extends BaseAdapter {
         }
 
         lblTotaal.setText(String.format("€ %.2f", prijs));
-        double sub = prijs / 1.21;
-        lblSubtotaal.setText(String.format("€ %.2f", sub));
-        lblBtw.setText(String.format("€ %.2f", prijs - sub));
     }
 }
