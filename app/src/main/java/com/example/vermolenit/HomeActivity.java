@@ -117,9 +117,8 @@ public class HomeActivity extends AppCompatActivity {
                     dialogYesNo.btnYes.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
-                            printKasticket(kasticket);
-
                             dialogYesNo.cancel();
+                            printKasticket(kasticket);
                         }
                     });
                     dialogYesNo.show();

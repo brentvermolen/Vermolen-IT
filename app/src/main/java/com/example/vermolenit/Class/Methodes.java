@@ -5,6 +5,7 @@ import android.os.Build;
 import android.print.PrintAttributes;
 import android.print.PrintDocumentAdapter;
 import android.print.PrintManager;
+import android.provider.CalendarContract;
 import android.webkit.WebView;
 import android.widget.Toast;
 
@@ -16,6 +17,8 @@ import com.example.vermolenit.R;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 
 import static android.content.Context.PRINT_SERVICE;
@@ -181,6 +184,11 @@ public class Methodes {
                 "            margin-top: 30px;\n" +
                 "        }\n" +
                 "\n" +
+                "        .betaalinfo {\n" +
+                "            padding-top: 15px;\n" +
+                "            text-align: right;\n" +
+                "        }" +
+                "\n" +
                 "        .title {\n" +
                 "            margin-top: 15px;\n" +
                 "        }\n" +
@@ -202,7 +210,7 @@ public class Methodes {
                 "    <div class=\"header\">\n" +
                 "        <div class=\"bedrijf_info two_third first\">\n" +
                 "            <h1>Vermolen-IT</h1>\n" +
-                "            <h3>BTW-Nummer</h3>" +
+                "            <h3>BTW BE0726.879.495</h3>" +
                 "            <h3>vermolen-it@hotmail.com</h3>\n" +
                 "            <h3>Consciencestraat 8</h3>\n" +
                 "            <h3>2330 Merksplas</h3>\n" +
@@ -331,8 +339,12 @@ public class Methodes {
                 "            <p>" + kasticket.getKlant().toString() + "</p>\n";
 
         if (!kasticket.getKlant().getBtw_nummer().equals("")){
-            middle += "            <p>" + kasticket.getKlant().getBtw_nummer() + "</p>\n";
+            middle += "            <p>BTW BE" + kasticket.getKlant().getBtw_nummer() + "</p>\n";
         }
+
+        Calendar vervalDatum = Calendar.getInstance();
+        vervalDatum.setTime(kasticket.getDatum());
+        vervalDatum.add(Calendar.DATE, 14);
 
         middle += "            <p>" + kasticket.getKlant().getAdres() + "</p>\n" +
                 "            <p>" + kasticket.getKlant().getPostcode() + " " + kasticket.getKlant().getWoonplaats() + "</p>\n" +
@@ -340,6 +352,8 @@ public class Methodes {
                 "        <div class=\"factuur_info one_half\">\n" +
                 "            <h3 class=\"one_half first title\">Datum</h3>\n" +
                 "            <p class=\"one_half title\">" + simpleDateFormat.format(kasticket.getDatum()) + "</p>\n" +
+                "            <h3 class=\"one_half first title\">Vervaldatum</h3>\n" +
+                "            <p class=\"one_half title\">" + simpleDateFormat.format(vervalDatum.getTime()) + "</p>" +
                 "            <h3 class=\"one_half first title\">Nummer</h3>\n" +
                 "            <p class=\"one_half title\">K" + String.format("%06d", kasticket.getId()) + "</p>\n" +
                 "        </div>\n" +
@@ -377,6 +391,14 @@ public class Methodes {
                 "            <h2 class=\"three_fourth first title\">Totaal:</h2>\n" +
                 "            <h2 class=\"one_fourth title\">" + String.format("€ %.2f", totaal) + "</h2>\n" +
                 "        </div>\n" +
+                "        <div class=\"betaalinfo first\">\n" +
+                "            <p>\n" +
+                "                Wij verzoeken u het verschuldigde bedrag ten laatste voor de vervaldatum over te maken onder vermelding van de referentie " + String.format("%06d", kasticket.getId()) + ".\n" +
+                "            </p>\n" +
+                "            <p>\n" +
+                "                Gelieve het bedrag te storten op de volgende rekening BE06 7360 5628 4922 met BIC KREDBEBB.\n" +
+                "            </p>\n" +
+                "        </div>" +
                 "    </div>";
 
         return middle;

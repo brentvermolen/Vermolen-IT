@@ -9,6 +9,7 @@ import android.widget.NumberPicker;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.vermolenit.Model.Artikel;
 import com.example.vermolenit.Model.Eenheid;
@@ -32,8 +33,11 @@ public class DialogArtikelToevoegen extends AlertDialog {
     final int minValueMelding = -1;
     final int maxValueMelding = 10;
 
+    Context mContext;
+
     public DialogArtikelToevoegen(Context context){
         super(context);
+        mContext = context;
 
         init(context);
         artikel = new Artikel();
@@ -101,7 +105,11 @@ public class DialogArtikelToevoegen extends AlertDialog {
         int rdgId = artikel.getEenheid().getId();
         RadioButton rdb = rdgEenheid.findViewWithTag(String.valueOf(rdgId));
 
-        rdb.setChecked(true);
+        if (rdb == null){
+            rdgEenheid.setEnabled(false);
+        }else{
+            rdb.setChecked(true);
+        }
 
         txtOmschrijving.setText(artikel.getOmschrijving());
         txtPrijs.setText(String.format("%.2f", artikel.getPrijs()));
