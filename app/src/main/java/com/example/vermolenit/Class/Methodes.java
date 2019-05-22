@@ -393,7 +393,7 @@ public class Methodes {
                 "        </div>\n" +
                 "        <div class=\"betaalinfo first\">\n" +
                 "            <p>\n" +
-                "                Wij verzoeken u het verschuldigde bedrag ten laatste voor de vervaldatum over te maken onder vermelding van de referentie " + String.format("%06d", kasticket.getId()) + ".\n" +
+                "                Wij verzoeken u het verschuldigde bedrag ten laatste voor de vervaldatum over te maken onder vermelding van de referentie K" + String.format("%06d", kasticket.getId()) + ".\n" +
                 "            </p>\n" +
                 "            <p>\n" +
                 "                Gelieve het bedrag te storten op de volgende rekening BE06 7360 5628 4922 met BIC KREDBEBB.\n" +
