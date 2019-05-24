@@ -153,9 +153,28 @@ public class ArtikelKasticketAdapter extends BaseAdapter {
 
     public void berekenPrijs(){
         double prijs = 0f;
+        boolean metKaart = false;
 
         for (KasticketArtikel kasticketArtikel : artikels){
-            prijs += kasticketArtikel.getArtikel().getPrijs() * kasticketArtikel.getAantal();
+            if (kasticketArtikel.getArtikel_id() != 0){
+                prijs += kasticketArtikel.getArtikel().getPrijs() * kasticketArtikel.getAantal();
+            }else {
+                metKaart = true;
+            }
+        }
+
+        if (metKaart){
+            double toelage = (prijs / 0.9725) - prijs;
+            if (toelage < 1){
+                prijs += 1;
+            }else{
+                prijs += toelage;
+            }
+            for (KasticketArtikel kasticketArtikel : artikels){
+                if (kasticketArtikel.getArtikel_id() == 0){
+                    kasticketArtikel.setHuidige_prijs(toelage);
+                }
+            }
         }
 
         lblTotaal.setText(String.format("€ %.2f", prijs));

@@ -258,36 +258,38 @@ public class CheckActivity extends AppCompatActivity {
         }.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
 
         for (final KasticketArtikel ka : kasticket.getKasticketArtikels()){
-            ka.setHuidige_prijs(ka.getArtikel().getPrijs());
-            ka.setKasticket_id(kasticket.getId());
-            DAC.KasticketArtikels.add(ka);
-            new AsyncTask<Void, Void, Void>(){
-                @Override
-                protected Void doInBackground(Void... voids) {
-                    RemoteKasticketArtikelDAO.insert(ka);
-                    return null;
-                }
-            }.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
+            if (ka.getArtikel_id() != 0){
+                ka.setHuidige_prijs(ka.getArtikel().getPrijs());
+                ka.setKasticket_id(kasticket.getId());
+                DAC.KasticketArtikels.add(ka);
+                new AsyncTask<Void, Void, Void>(){
+                    @Override
+                    protected Void doInBackground(Void... voids) {
+                        RemoteKasticketArtikelDAO.insert(ka);
+                        return null;
+                    }
+                }.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
 
-            if (ka.getArtikel().getVoorraad() > 0){
-                if (ka.getArtikel().getVoorraad() - ka.getAantal() >= 0){
-                    ka.getArtikel().setVoorraad(ka.getArtikel().getVoorraad() - ka.getAantal());
-                    new AsyncTask<Void, Void, Void>(){
-                        @Override
-                        protected Void doInBackground(Void... voids) {
-                            RemoteArtikelDAO.update(ka.getArtikel());
-                            return null;
-                        }
-                    }.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
-                }else{
-                    ka.getArtikel().setVoorraad(0);
-                    new AsyncTask<Void, Void, Void>(){
-                        @Override
-                        protected Void doInBackground(Void... voids) {
-                            RemoteArtikelDAO.update(ka.getArtikel());
-                            return null;
-                        }
-                    }.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
+                if (ka.getArtikel().getVoorraad() > 0){
+                    if (ka.getArtikel().getVoorraad() - ka.getAantal() >= 0){
+                        ka.getArtikel().setVoorraad(ka.getArtikel().getVoorraad() - ka.getAantal());
+                        new AsyncTask<Void, Void, Void>(){
+                            @Override
+                            protected Void doInBackground(Void... voids) {
+                                RemoteArtikelDAO.update(ka.getArtikel());
+                                return null;
+                            }
+                        }.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
+                    }else{
+                        ka.getArtikel().setVoorraad(0);
+                        new AsyncTask<Void, Void, Void>(){
+                            @Override
+                            protected Void doInBackground(Void... voids) {
+                                RemoteArtikelDAO.update(ka.getArtikel());
+                                return null;
+                            }
+                        }.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
+                    }
                 }
             }
         }
