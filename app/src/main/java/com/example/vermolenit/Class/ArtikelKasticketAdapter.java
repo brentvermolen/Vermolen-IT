@@ -164,12 +164,12 @@ public class ArtikelKasticketAdapter extends BaseAdapter {
         }
 
         if (metKaart){
-            double toelage = (prijs / 0.9725) - prijs;
-            if (toelage < 1){
-                prijs += 1;
-            }else{
-                prijs += toelage;
+            double toelage = (prijs / 0.9725f) - prijs;
+            if (toelage < 0.85f){
+                toelage = 0.85f;
             }
+            prijs += toelage;
+
             for (KasticketArtikel kasticketArtikel : artikels){
                 if (kasticketArtikel.getArtikel_id() == 0){
                     kasticketArtikel.setHuidige_prijs(toelage);
