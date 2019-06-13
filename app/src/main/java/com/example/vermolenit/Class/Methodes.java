@@ -335,7 +335,8 @@ public class Methodes {
         String middle = "<hr class=\"first\" />" +
                 "<div class=\"middle\">\n" +
                 "        <div class=\"factuur_aan one_half first\">\n" +
-                "            <h3 class=\"title\">Aan</h3>\n" +
+                "            <h2 class=\"title\">Factuur</h2>\n" +
+                "            <h3>Aan</h3>" +
                 "            <p>" + kasticket.getKlant().toString() + "</p>\n";
 
         if (!kasticket.getKlant().getBtw_nummer().equals("")){
@@ -350,6 +351,7 @@ public class Methodes {
                 "            <p>" + kasticket.getKlant().getPostcode() + " " + kasticket.getKlant().getWoonplaats() + "</p>\n" +
                 "        </div>\n" +
                 "        <div class=\"factuur_info one_half\">\n" +
+                "            <h2 class=\"title\"></h2>\n" +
                 "            <h3 class=\"one_half first title\">Datum</h3>\n" +
                 "            <p class=\"one_half title\">" + simpleDateFormat.format(kasticket.getDatum()) + "</p>\n" +
                 "            <h3 class=\"one_half first title\">Vervaldatum</h3>\n" +
@@ -373,7 +375,7 @@ public class Methodes {
             totaal += prijs * kasticketArtikel.getAantal();
 
             middle += "                <tr>\n" +
-                    "                    <td style=\"width: 55%\">" + kasticketArtikel.getArtikel().getOmschrijving() + "</td>\n" +
+                    "                    <td style=\"width: 55%\">" + (kasticketArtikel.getOmschrijving() == null ? kasticketArtikel.getArtikel().getOmschrijving() : kasticketArtikel.getOmschrijving()) + "</td>\n" +
                     "                    <td style=\"width: 15%\">" + kasticketArtikel.getAantal() + kasticketArtikel.getArtikel().getEenheid().getVerkort() + "</td>\n" +
                     "                    <td style=\"width: 15%\">" + String.format("€ %.2f", prijs) + "</td>\n" +
                     "                    <td style=\"width: 15%\">" + String.format("€ %.2f", prijs * kasticketArtikel.getAantal()) + "</td>\n" +
@@ -409,7 +411,7 @@ public class Methodes {
                 "    <div class=\"footer\">\n" +
                 "        <p class=\"one_third first\">Vermolen-IT</p>\n" +
                 "        <p class=\"one_third\">vermolen-it@hotmail.com</p>\n" +
-                "        <p class=\"one_third\">0476/79.83.46</p>\n" +
+                "        <p class=\"one_third\">0467/03.18.52</p>\n" +
                 "    </div></body>\n" +
                 "</html>\n";
     }

@@ -9,6 +9,12 @@ import java.sql.DriverManager;
 import java.sql.SQLException;
 
 public class DbVermolenItRemote {
+    /*String ip = "184.168.194.64";
+    String classs = "net.sourceforge.jtds.jdbc.Driver";
+    String db = "brentvermolen-trakt";
+    String un = "brentvermolen";
+    String password = "R~xh0v10";*/
+
     String ip = "5.10.80.108:780";
     String classs = "net.sourceforge.jtds.jdbc.Driver";
     String db = "vermolens_trakt";

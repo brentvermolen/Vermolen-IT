@@ -12,6 +12,8 @@ public class KasticketArtikel {
     private int aantal;
     private double huidige_prijs;
 
+    private String omschrijving;
+
     @Ignore
     private Artikel artikel;
     @Ignore
@@ -49,6 +51,14 @@ public class KasticketArtikel {
 
     public void setHuidige_prijs(double huidige_prijs) {
         this.huidige_prijs = huidige_prijs;
+    }
+
+    public String getOmschrijving() {
+        return omschrijving;
+    }
+
+    public void setOmschrijving(String omschrijving) {
+        this.omschrijving = omschrijving;
     }
 
     public Artikel getArtikel() {

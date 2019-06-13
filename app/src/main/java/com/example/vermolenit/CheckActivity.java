@@ -211,6 +211,7 @@ public class CheckActivity extends AppCompatActivity {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
+        kasticket.setKasticketArtikels(kasticketArtikels);
 
         if (id == 16908332){
             onBackPressed();
@@ -255,11 +256,13 @@ public class CheckActivity extends AppCompatActivity {
                 RemoteKasticketArtikelDAO.deleteByKasticket(kasticket.getId());
                 return null;
             }
-        }.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
+        }.execute();
 
         for (final KasticketArtikel ka : kasticket.getKasticketArtikels()){
-            if (ka.getArtikel_id() != 0){
-                ka.setHuidige_prijs(ka.getArtikel().getPrijs());
+            if (ka.getArtikel_id() >= 0){
+                if (ka.getArtikel_id() != 0){
+                    ka.setHuidige_prijs(ka.getArtikel().getPrijs());
+                }
                 ka.setKasticket_id(kasticket.getId());
                 DAC.KasticketArtikels.add(ka);
                 new AsyncTask<Void, Void, Void>(){
@@ -268,7 +271,7 @@ public class CheckActivity extends AppCompatActivity {
                         RemoteKasticketArtikelDAO.insert(ka);
                         return null;
                     }
-                }.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
+                }.execute();
 
                 if (ka.getArtikel().getVoorraad() > 0){
                     if (ka.getArtikel().getVoorraad() - ka.getAantal() >= 0){

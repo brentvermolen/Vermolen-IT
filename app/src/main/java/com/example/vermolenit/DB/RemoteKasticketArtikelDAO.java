@@ -6,7 +6,10 @@ import com.example.vermolenit.Model.Artikel;
 import com.example.vermolenit.Model.Eenheid;
 import com.example.vermolenit.Model.KasticketArtikel;
 
+import net.sourceforge.jtds.jdbc.ParameterMetaDataImpl;
+
 import java.sql.Connection;
+import java.sql.ParameterMetaData;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
@@ -37,6 +40,11 @@ public class RemoteKasticketArtikelDAO {
                     artikel.setKasticket_id(rs.getInt(2));
                     artikel.setAantal(rs.getInt(3));
                     artikel.setHuidige_prijs(rs.getDouble(4));
+                    if (rs.getString(5) != null){
+                        artikel.setOmschrijving(rs.getString(5));
+                    }else{
+                        artikel.setOmschrijving(null);
+                    }
 
                     data.add(artikel);
                 }
@@ -70,9 +78,17 @@ public class RemoteKasticketArtikelDAO {
             } else {
                 String query = "Insert Into vit_kasticket_artikel Values(" +
                         kasticketArtikel.getArtikel_id() + ", " +
-                        kasticketArtikel.getKasticket_id() + ", " +
+                        kasticketArtikel.getKasticket().getId() + ", " +
                         kasticketArtikel.getAantal() + ", " +
-                        kasticketArtikel.getHuidige_prijs() + ")";
+                        kasticketArtikel.getHuidige_prijs() + ", ";
+                if (!(kasticketArtikel.getOmschrijving() == null)){
+                    query += "'" + kasticketArtikel.getOmschrijving() + "'";
+                }else{
+                    query += "null";
+                }
+
+                query += ")";
+
                 Statement stmt = con.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
                 stmt.execute(query);
             }
@@ -103,7 +119,15 @@ public class RemoteKasticketArtikelDAO {
             } else {
                 String query = "Update vit_kasticket_artikel Set Aantal=" +
                         kasticketArtikel.getAantal() + ", Huidige_Prijs=" +
-                        kasticketArtikel.getHuidige_prijs() + " Where KasticketID=" + kasticketArtikel.getKasticket_id() + " AND ArtikelID=" + kasticketArtikel.getArtikel_id();
+                        kasticketArtikel.getHuidige_prijs() + ",";
+
+                if (!(kasticketArtikel.getOmschrijving() == null)){
+                    query += kasticketArtikel.getOmschrijving();
+                }else{
+                    query += "null";
+                }
+
+                query += " Where KasticketID=" + kasticketArtikel.getKasticket_id() + " AND ArtikelID=" + kasticketArtikel.getArtikel_id();
                 Statement stmt = con.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
                 stmt.executeUpdate(query);
             }

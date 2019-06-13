@@ -1,10 +1,14 @@
 package com.example.vermolenit.Class;
 
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
+import android.text.InputType;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -20,6 +24,8 @@ public class ArtikelKasticketAdapter extends BaseAdapter {
     private List<KasticketArtikel> artikels;
 
     private TextView lblTotaal;
+
+    String m_Text = null;
 
     public ArtikelKasticketAdapter(Context context, List<KasticketArtikel> artikels){
         this.mContext = context;
@@ -76,6 +82,41 @@ public class ArtikelKasticketAdapter extends BaseAdapter {
             viewHolder.btnDelete = convertView.findViewById(R.id.btn_delete);
             viewHolder.btnMin = convertView.findViewById(R.id.btnMin);
             viewHolder.btnPlus = convertView.findViewById(R.id.btnPlus);
+
+
+            viewHolder.lblTitel.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    final KasticketArtikel kasticketArtikel = (KasticketArtikel) viewHolder.lblTitel.getTag();
+
+                    AlertDialog.Builder builder = new AlertDialog.Builder(mContext);
+                    builder.setTitle("Omschrijving");
+
+                    // Set up the input
+                    final EditText input = new EditText(mContext);
+                    input.setText(kasticketArtikel.getOmschrijving() == null ? kasticketArtikel.getArtikel().getOmschrijving() : kasticketArtikel.getOmschrijving());
+                    // Specify the type of input expected; this, for example, sets the input as a password, and will mask the text
+                    input.setInputType(InputType.TYPE_CLASS_TEXT);
+                    builder.setView(input);
+
+                    // Set up the buttons
+                    builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            m_Text = input.getText().toString();
+                            kasticketArtikel.setOmschrijving(input.getText().toString());
+                        }
+                    });
+                    builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            dialog.cancel();
+                        }
+                    });
+
+                    builder.show();
+                }
+            });
 
             viewHolder.btnDelete.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -139,8 +180,13 @@ public class ArtikelKasticketAdapter extends BaseAdapter {
         }
 
         KasticketArtikel artikel = (KasticketArtikel) getItem(position);
+        m_Text = artikel.getOmschrijving();
 
         viewHolder.lblTitel.setText(artikel.getArtikel().getOmschrijving());
+        if (m_Text != null){
+            artikel.setOmschrijving(m_Text);
+            viewHolder.lblTitel.setText(artikel.getOmschrijving());
+        }
         viewHolder.lblAantal.setText(String.valueOf(artikel.getAantal()));
         if (artikel.getAantal() == 1){
             viewHolder.btnMin.setEnabled(false);
